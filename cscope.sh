@@ -1,6 +1,6 @@
-:
-# vim: ts=4
-# Copyright 2014 Digital Aggregates Corp.
+#!/bin/bash
+# Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
+# Licensed under the GPLv2.
 
 LST=.cscope.lst
 REF=.cscope.out

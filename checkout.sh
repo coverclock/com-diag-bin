@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+# Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
+# Licensed under the GPLv2.
 
 # amigo         - FreeRTOS on Arduino Mega 2560
 # arduino       - Arduino Uno R3 musings

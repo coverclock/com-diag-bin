@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
+# Licensed under the GPLv2.
 DEVCIF=${1:-"ppp0"}
 SELFIP=${2:-"192.168.1.1"}
 DEVCIP=${3:-"192.168.1.2"}

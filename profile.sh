@@ -1,3 +1,7 @@
+:
+# Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
+# Licensed under the GPLv2.
+
 NEWPATH="$HOME/bin"
 echo $PATH | grep -q "$NEWPATH" || export PATH=$NEWPATH:$PATH
 
