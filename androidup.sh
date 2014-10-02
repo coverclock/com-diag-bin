@@ -14,11 +14,11 @@ if [ "${DEVCSN}" != "" ]; then
     DEVICE="-s ${DEVCSN}"
 fi
 sudo adb ${DEVICE} root
-sleep 1
 sudo sysctl net.ipv4.ip_forward=1
 sudo iptables -t nat -I POSTROUTING -s ${DEVCIP} -j MASQUERADE -o eth0 ${SUFFIX}
 sudo iptables -I FORWARD --in-interface ${DEVCIF} -j ACCEPT ${SUFFIX}
 sudo iptables -I INPUT --in-interface ${DEVCIF} -j ACCEPT ${SUFFIX}
+sudo adb wait-for-device
 sudo adb ${DEVICE} ppp "shell:pppd nodetach noauth noipdefault defaultroute /dev/tty" nodetach noauth noipdefault notty ${SELFIP}:${DEVCIP}
 adb ${DEVICE} shell ndc resolver flushif ${DEVCIF}
 adb ${DEVICE} shell ndc resolver flushdefaultif

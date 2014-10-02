@@ -31,8 +31,6 @@ if [ ! \( -f ${INF} -a -f ${POF} \) ]; then
 				-type d -name .svn -prune -o \
 				-type d -name .git -prune -o \
 				-type d -name .repo -prune -o \
-				-type d -path ./out -prune -o \
-				-type d -path ./prebuilts -prune -o \
 				-type f -a \( \
 					-name '*.[CcHhSs]' -o \
 					-name '*.[a-z]mk' -o \
@@ -50,7 +48,8 @@ if [ ! \( -f ${INF} -a -f ${POF} \) ]; then
 					-name '*.rc' -o \
 					-name '*.sh' -o \
 					-name '*.xml' -o \
-					-name '*.xsd' \
+					-name '*.xsd' -o \
+					-name '*_defconfig' -o \
 					-name '.config' -o \
 					-name 'Config.in*' -o \
 					-name 'GNUmakefile*' -o \
