@@ -30,7 +30,8 @@ if [ ! \( -f ${INF} -a -f ${POF} \) ]; then
 			find -P ${DD} \
 				-type d -name .svn -prune -o \
 				-type d -name .git -prune -o \
-				-type d -name .repo -prune -o \
+				-type d -path ./.repo -prune -o \
+				-type d -path ./out -prune -o \
 				-type f -a \( \
 					-name '*.[CcHhSs]' -o \
 					-name '*.[a-z]mk' -o \
@@ -47,6 +48,7 @@ if [ ! \( -f ${INF} -a -f ${POF} \) ]; then
 					-name '*.mk' -o \
 					-name '*.rc' -o \
 					-name '*.sh' -o \
+					-name '*.txt' -o \
 					-name '*.xml' -o \
 					-name '*.xsd' -o \
 					-name '*_defconfig' -o \
@@ -65,9 +67,8 @@ if [ ! \( -f ${INF} -a -f ${POF} \) ]; then
 					-false \
 				\) -print
 		done
-	) | sed 's/^/"/;s/$/"/' > ${LST}
+	) | sed 's/^/"/;s/$/"/' | sort | uniq > ${LST}
 
 fi
 
 exec cscope -kqR -i${LST} -f${REF}
-
