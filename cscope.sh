@@ -15,7 +15,7 @@ if [ ! \( -f ${INF} -a -f ${POF} \) ]; then
 		DIR="$*"
 	fi
 
-	INC="`${CROSS_COMPILE}gcc -xc -E -v - < /dev/null 2>&1 | grep '^[ ]' | sed 's/^ //' | grep -v ' '`"
+	INC="`${CROSS_COMPILE}gcc -x c -E -v - < /dev/null 2>&1 | grep '^[ ]' | sed 's/^ //' | grep -v ' '`"
 
 	rm -f .cscope.*
 
