@@ -22,11 +22,10 @@ if [ ! \( -f ${INF} -a -f ${POF} \) ]; then
 	cp /dev/null ${LST}
 
 	(
-		cd ${DIR}
 		for II in ${INC}; do
 			find -P ${II} -type f -print
 		done
-		for DD in .; do
+		for DD in ${DIR}; do
 			find -P ${DD} \
 				-type d -name .svn -prune -o \
 				-type d -name .git -prune -o \
