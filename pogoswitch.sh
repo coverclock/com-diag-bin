@@ -9,10 +9,11 @@ EXPECTFILE=`mktemp /tmp/${ZERO}.XXXXXXXX`
 trap "rm -f ${EXPECTFILE}" ERR HUP INT TERM
 BAUDRATE="9600"
 SERIALPORT="/dev/ttyUSB0"
-TIMEOUT="5"
+TIMEOUT="1"
 REPEAT=10
 NETBOOTERLOGIN="admin"
 NETBOOTERPASSWD="admin"
+OUTLET="1"
 
 cat << EOF > ${EXPECTFILE}
 stty ospeed ${BAUDRATE} ispeed ${BAUDRATE} cs8 < ${SERIALPORT}
@@ -26,6 +27,48 @@ send "${NETBOOTERLOGIN}\r"
 expect { "${NETBOOTERLOGIN}\rPassword:" { } timeout { abort } }
 send "${NETBOOTERPASSWD}\r"
 expect { "*****\r>" { } timeout { abort } }
+send "pset ${OUTLET} 1\r"
+expect { "pset ${OUTPUT} 1\r>" { } timeout { abort } }
+send "logout\r"
+expect { "logout\r>" { } timeout { abort } }
+EOF
+
+expect -f ${EXPECTFILE} || exit 2
+
+cat << EOF > ${EXPECTFILE}
+stty ospeed ${BAUDRATE} ispeed ${BAUDRATE} cs8 < ${SERIALPORT}
+set timeout ${TIMEOUT}
+spawn -open [open ${SERIALPORT} RDWR]
+send "\r"
+expect { "\r>" { } timeout { abort } }
+send "login\r"
+expect { "login\rUser ID: " { } timeout { abort } }
+send "${NETBOOTERLOGIN}\r"
+expect { "${NETBOOTERLOGIN}\rPassword:" { } timeout { abort } }
+send "${NETBOOTERPASSWD}\r"
+expect { "*****\r>" { } timeout { abort } }
+send "pset ${OUTLET} 0\r"
+expect { "pset ${OUTPUT} 0\r>" { } timeout { abort } }
+send "logout\r"
+expect { "logout\r>" { } timeout { abort } }
+EOF
+
+expect -f ${EXPECTFILE} || exit 2
+
+cat << EOF > ${EXPECTFILE}
+stty ospeed ${BAUDRATE} ispeed ${BAUDRATE} cs8 < ${SERIALPORT}
+set timeout ${TIMEOUT}
+spawn -open [open ${SERIALPORT} RDWR]
+send "\r"
+expect { "\r>" { } timeout { abort } }
+send "login\r"
+expect { "login\rUser ID: " { } timeout { abort } }
+send "${NETBOOTERLOGIN}\r"
+expect { "${NETBOOTERLOGIN}\rPassword:" { } timeout { abort } }
+send "${NETBOOTERPASSWD}\r"
+expect { "*****\r>" { } timeout { abort } }
+send "pset ${OUTLET} 1\r"
+expect { "pset ${OUTPUT} 1\r>" { } timeout { abort } }
 send "logout\r"
 expect { "logout\r>" { } timeout { abort } }
 EOF
