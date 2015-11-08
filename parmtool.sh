@@ -9,14 +9,17 @@ ROOTETC=${PARMTOOLETC:-"/etc/parmtool/db"}
 ROOTRUN=${PARMTOOLRUN:-"/run/parmtool/db"}
 CAT=${PARMTOOLCAT:-"cat"}
 
-while getopts "h" OPT; do
+while getopts "hLlrwW" OPT; do
+
 	case ${OPT} in
+
+	h)
+		echo "${ZERO} [ -L | -l | -r KEYWORD | -w KEYWORD=VALUE | -W KEYWORD=VALUE ]" 1>&2
+		;;
+
 	L)
 		test -d ${ROOTETC} && find ${ROOTETC} -type f -print -exec ${CAT} {} \;
 		test -d ${ROOTRUN} && find ${ROOTRUN} -type f -print -exec ${CAT} {} \;
-		;;
-	h)
-		echo "${ZERO} [ -L | -l | -r KEYWORD | -w KEYWORD=VALUE | -W KEYWORD=VALUE ]" 1>&2
 		;;
 
 	l)
@@ -29,10 +32,10 @@ while getopts "h" OPT; do
 			TEMP1=`mktemp /tmp/${FILE}.XXXXXXXX`
 			sort < ${TEMP0} | uniq > ${TEMP1}
 			rm -f ${TEMP0}
-			while read NAME; do
-				FILER="${ROOTR}/${NAME}"
-				FILEE="${ROOTE}/${NAME}"
-				KEYWORD="${NAME//\//.}"
+			while read PATH1; do
+				FILER="${ROOTR}/${PATH1}"
+				FILEE="${ROOTE}/${PATH1}"
+				KEYWORD="${PATH1//\//.}"
 				if [ -f ${FILER} ]; then
 					FILE="${FILER}"
 					while read VALUE; do
@@ -78,10 +81,10 @@ while getopts "h" OPT; do
 			TEMP1=`mktemp /tmp/${FILE}.XXXXXXXX`
 			sort < ${TEMP0} | uniq > ${TEMP1}
 			rm -f ${TEMP0}
-			while read NAME; do
-				FILER="${ROOTR}/${NAME}"
-				FILEE="${ROOTE}/${NAME}"
-				KEYWORD="${NAME//\//.}"
+			while read PATH1; do
+				FILER="${ROOTR}/${PATH1}"
+				FILEE="${ROOTE}/${PATH1}"
+				KEYWORD="${PATH1//\//.}"
 				if [ -f ${FILER} ]; then
 					FILE="${FILER}"
 					while read VALUE; do
@@ -107,7 +110,7 @@ while getopts "h" OPT; do
 		PATHR="${KEYWORD//\.//}"
 		FILER="${ROOTRRUN}/${PATHR}"
 		ROOTR=`dirname ${FILER}`
-		mkdir -p ${ROOTR}
+		test -d ${ROOTR} || mkdir -p ${ROOTR}
 		TEMPR=`mktemp ${FILER}.XXXXXXXX`
 		echo "${VALUE}" > ${TEMPR}
 		mv -f ${TEMPR} ${FILER}
@@ -118,12 +121,14 @@ while getopts "h" OPT; do
 		PATHE="${KEYWORD//\.//}"
 		FILEE="${ROOTEETC}/${PATHE}"
 		ROOTE=`dirname ${FILEE}`
-		mkdir -p ${ROOTE}
+		test -d ${ROOTE} || mkdir -p ${ROOTE}
 		TEMPE=`mktemp ${FILEE}.XXXXXXXX`
 		echo "${VALUE}" > ${TEMPE}
 		mv -f ${TEMPE} ${FILEE}
 		;;
+
 	esac
+
 done
 
 exit 0
