@@ -13,6 +13,8 @@ POWER_TIMEOUT="1"
 TARGET_IPADDRESS="192.168.1.115"
 TARGET_LOGIN="pi"
 TARGET_PASSWD="raspberry"
+TARGET_HOSTNAME="raspberrypi"
+TARGET_PROMPT="${TARGET_LOGIN}@${TARGET_HOSTNAME} ~ $ "
 
 OFFTIME="30"
 ONTIME="120"
@@ -48,7 +50,7 @@ set timeout ${TARGET_TIMEOUT}
 spawn ssh ${TARGET_LOGIN}@${TARGET_IPADDRESS}
 expect { "${TARGET_LOGIN}@${TARGET_IPADDRESS}'s password:" { } timeout { exit 2 } }
 send "${TARGET_PASSWD}\r"
-expect { "pi@raspberrypi ~ $ " { } timeout { exit 2 } }
+expect { "${TARGET_PROMPT}" { } timeout { exit 2 } }
 send "exit \r"
 expect { "logout\rConnection to ${TARGET_IPADDRESS} closed.\r" { } timeout { exit 2 } }
 EOF
@@ -90,7 +92,7 @@ while [ ${ITERATIONS} -gt 0 ]; do
 	spawn ssh ${TARGET_LOGIN}@${TARGET_IPADDRESS}
 	expect { "${TARGET_LOGIN}@${TARGET_IPADDRESS}'s password:" { } timeout { exit 2 } }
 	send "${TARGET_PASSWD}\r"
-	expect { "pi@raspberrypi ~ $ " { } timeout { exit 2 } }
+	expect { ""${TARGET_PROMPT}"" { } timeout { exit 2 } }
 	send "exit \r"
 	expect { "logout\rConnection to ${TARGET_IPADDRESS} closed.\r" { } timeout { exit 2 } }
 	EOF
