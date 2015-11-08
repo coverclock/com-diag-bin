@@ -32,10 +32,10 @@ while getopts "hLld:r:w:W:X" OPT; do
 		if [ -d ${FILER} -o -d ${FILEE} ]; then
 			TEMP0=`mktemp /tmp/${FILE}.XXXXXXXX`
 			if [ -d ${ROOTR} ]; then
-				( cd ${ROOTR}; find . -type f -print ) >> ${TEMP0}
+				( cd ${ROOTR}; find . -type f -name .value -print ) >> ${TEMP0}
 			fi
 			if [ -d ${ROOTE} ]; then
-				( cd ${ROOTE}; find . -type f -print ) >> ${TEMP0}
+				( cd ${ROOTE}; find . -type f -name .value -print ) >> ${TEMP0}
 			fi
 			TEMP1=`mktemp /tmp/${FILE}.XXXXXXXX`
 			sort < ${TEMP0} | uniq | sed 's/^\.\///' > ${TEMP1}
@@ -43,17 +43,16 @@ while getopts "hLld:r:w:W:X" OPT; do
 			while read PATH1; do
 				FILER="${ROOTR}/${PATH1}"
 				FILEE="${ROOTE}/${PATH1}"
-				KEYWORD="${PATH1//\//.}"
+				PATH0="${PATH1%/.value}"
+				KEYWORD="${PATH0//\//.}"
 				if [ -f ${FILER} ]; then
-					FILE="${FILER}"
 					while read VALUE; do
 						echo ${KEYWORD} = ${VALUE}
-					done < ${FILE}
+					done < ${FILER}
 				elif [ -f ${FILEE} ]; then
-					FILE="${FILEE}"
 					while read VALUE; do
 						echo ${KEYWORD} = ${VALUE}
-					done < ${FILE}
+					done < ${FILEE}
 				else
 					:
 				fi
@@ -66,18 +65,20 @@ while getopts "hLld:r:w:W:X" OPT; do
 
 	d)
 		KEYWORD=`echo "${OPTARG}" | awk -F '=' '{ print $1; }'`
-		PATHR="${KEYWORD//\.//}"
-		FILER="${ROOTRUN}/${PATHR}"
-		PATHE="${KEYWORD//\.//}"
-		FILEE="${ROOTETC}/${PATHE}"
+		PATH0="${KEYWORD%\.\*}"
+		PATH1="${PATH0//\.//}"
+		PATHR="${ROOTRUN}/${PATH1}"
+		FILER="${PATHR}/.value"
+		PATHE="${ROOTETC}/${PATH1}"
+		FILEE="${PATHE}/.value"
 		if [ -f ${FILER} ]; then
 			rm -f ${FILER}
-		elif [ -d ${FILER} ]; then
-			rm -rf ${FILER}
+		elif [ -d ${PATHR} ]; then
+			rm -rf ${PATHR}
 		elif [ -f ${FILEE} ]; then
 			rm -f ${FILEE}
-		elif [ -d ${FILEE} ]; then
-			rm -rf ${FILEE}
+		elif [ -d ${PATHE} ]; then
+			rm -rf ${PATHE}
 		else
 			:
 		fi
@@ -85,57 +86,57 @@ while getopts "hLld:r:w:W:X" OPT; do
 
 	r)
 		KEYWORD=`echo "${OPTARG}" | awk -F '=' '{ print $1; }'`
-		PRE="${KEYWORD%\.\*}"
-		PATH0="${PRE//\.//}"
+		PATH0="${KEYWORD%\.\*}"
+		PATH1="${PATH0//\.//}"
 		ROOTR="${ROOTRUN}"
-		FILER="${ROOTR}/${PATH0}"
+		PATHR="${ROOTR}/${PATH1}"
+		FILER="${PATHR}/.value"
 		ROOTE="${ROOTETC}"
-		FILEE="${ROOTE}/${PATH0}"
+		PATHE="${ROOTE}/${PATH1}"
+		FILEE="${PATHE}/.value"
 		if [ -f ${FILER} ]; then
-			FILE="${FILER}"
 			while read VALUE; do
 				echo ${KEYWORD} = ${VALUE}
-			done < ${FILE}
+			done < ${FILER}
 		elif [ -f ${FILEE} ]; then
-			FILE="${FILEE}"
 			while read VALUE; do
 				echo ${KEYWORD} = ${VALUE}
-			done < ${FILE}
-		elif [ -d ${FILER} -o -d ${FILEE} ]; then
+			done < ${FILEE}
+		elif [ -d ${PATHR} -o -d ${PATHE} ]; then
 			TEMP0=`mktemp /tmp/${FILE}.XXXXXXXX`
 			if [ -d ${ROOTR} ]; then
 				(
 					cd ${ROOTR}
-					if [ -d ${PATH0} ]; then
-						find ${PATH0} -type f -print
+					if [ -d ${PATH1} ]; then
+						find ${PATH1} -type f -print
 					fi
 				) >> ${TEMP0}
 			fi
 			if [ -d ${ROOTE} ]; then
 				(
 					cd ${ROOTE}
-					if [ -d ${PATH0} ]; then
-						find ${PATH0} -type f -print
+					if [ -d ${PATH1} ]; then
+						find ${PATH1} -type f -print
 					fi
 				) >> ${TEMP0}
 			fi
 			TEMP1=`mktemp /tmp/${FILE}.XXXXXXXX`
 			sort < ${TEMP0} | uniq > ${TEMP1}
 			rm -f ${TEMP0}
-			while read PATH1; do
-				FILER="${ROOTR}/${PATH1}"
-				FILEE="${ROOTE}/${PATH1}"
-				KEYWORD="${PATH1//\//.}"
+			while read PATH2; do
+				PATHR="${ROOTR}/${PATH2}"
+				FILER="${PATHR}/.value"
+				PATHE="${ROOTE}/${PATH2}"
+				FILEE="${PATHE}/.value"
+				KEYWORD="${PATH2//\//.}"
 				if [ -f ${FILER} ]; then
-					FILE="${FILER}"
 					while read VALUE; do
 						echo ${KEYWORD} = ${VALUE}
-					done < ${FILE}
+					done < ${FILER}
 				elif [ -f ${FILEE} ]; then
-					FILE="${FILEE}"
 					while read VALUE; do
 						echo ${KEYWORD} = ${VALUE}
-					done < ${FILE}
+					done < ${FILEE}
 				else
 					:
 				fi
@@ -148,8 +149,8 @@ while getopts "hLld:r:w:W:X" OPT; do
 	w)
 		KEYWORD=`echo "${OPTARG}" | awk -F '=' '{ print $1; }'`
 		VALUE=`echo "${OPTARG}" | awk -F '=' '{ print $2; }'`
-		PATHR="${KEYWORD//\.//}"
-		FILER="${ROOTRUN}/${PATHR}"
+		PATH0="${KEYWORD//\.//}"
+		FILER="${ROOTRUN}/${PATH0}"
 		ROOTR=`dirname ${FILER}`
 		if [ ! -d ${ROOTR} ]; then
 			 mkdir -p ${ROOTR}
@@ -161,8 +162,8 @@ while getopts "hLld:r:w:W:X" OPT; do
 	W)
 		KEYWORD=`echo "${OPTARG}" | awk -F '=' '{ print $1; }'`
 		VALUE=`echo "${OPTARG}" | awk -F '=' '{ print $2; }'`
-		PATHE="${KEYWORD//\.//}"
-		FILEE="${ROOTETC}/${PATHE}"
+		PATH0="${KEYWORD//\.//}"
+		FILEE="${ROOTETC}/${PATH0}"
 		ROOTE=`dirname ${FILEE}`
 		if [ ! -d ${ROOTE} ]; then
 			mkdir -p ${ROOTE}
