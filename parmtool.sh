@@ -64,7 +64,7 @@ while getopts "hLld:r:w:W:X" OPT; do
 		;;
 
 	d)
-		KEYWORD=`echo "${OPTARG}" | awk -F '=' '{ print $1; }'`
+		KEYWORD="${OPTARG%%=*}"
 		PATH0="${KEYWORD%\.\*}"
 		PATH1="${PATH0//\.//}"
 		PATHR="${ROOTRUN}/${PATH1}"
@@ -85,7 +85,7 @@ while getopts "hLld:r:w:W:X" OPT; do
 		;;
 
 	r)
-		KEYWORD=`echo "${OPTARG}" | awk -F '=' '{ print $1; }'`
+		KEYWORD="${OPTARG%%=*}"
 		PATH0="${KEYWORD%\.\*}"
 		PATH1="${PATH0//\.//}"
 		ROOTR="${ROOTRUN}"
@@ -147,26 +147,26 @@ while getopts "hLld:r:w:W:X" OPT; do
 		fi
 		;;
 	w)
-		KEYWORD=`echo "${OPTARG}" | awk -F '=' '{ print $1; }'`
-		VALUE=`echo "${OPTARG}" | awk -F '=' '{ print $2; }'`
+		KEYWORD="${OPTARG%%=*}"
+		VALUE="${OPTARG##*=}"
 		PATH0="${KEYWORD//\.//}"
-		FILER="${ROOTRUN}/${PATH0}"
-		ROOTR=`dirname ${FILER}`
-		if [ ! -d ${ROOTR} ]; then
-			 mkdir -p ${ROOTR}
+		PATHR="${ROOTRUN}/${PATH0}"
+		FILER="${PATHR}/.value"
+		if [ ! -d ${PATHR} ]; then
+			 mkdir -p ${PATHR}
 		fi
 		TEMPR=`mktemp ${FILER}.XXXXXXXX`
 		echo "${VALUE}" > ${TEMPR}
 		mv -f ${TEMPR} ${FILER}
 		;;
 	W)
-		KEYWORD=`echo "${OPTARG}" | awk -F '=' '{ print $1; }'`
-		VALUE=`echo "${OPTARG}" | awk -F '=' '{ print $2; }'`
+		KEYWORD="${OPTARG%%=*}"
+		VALUE="${OPTARG##*=}"
 		PATH0="${KEYWORD//\.//}"
-		FILEE="${ROOTETC}/${PATH0}"
-		ROOTE=`dirname ${FILEE}`
-		if [ ! -d ${ROOTE} ]; then
-			mkdir -p ${ROOTE}
+		PATHE="${ROOTETC}/${PATH0}"
+		FILEE="${PATHE}/.value"
+		if [ ! -d ${PATHE} ]; then
+			mkdir -p ${PATHE}
 		fi
 		TEMPE=`mktemp ${FILEE}.XXXXXXXX`
 		echo "${VALUE}" > ${TEMPE}
@@ -175,10 +175,10 @@ while getopts "hLld:r:w:W:X" OPT; do
 
 	X)
 		if [ -d ${ROOTETC} ]; then
-			find ${ROOTETC} -type f -print -exec ${CAT} {} \;
+			find ${ROOTETC} -type f -name .value -print -exec ${CAT} {} \;
 		fi
 		if [ -d ${ROOTRUN} ]; then
-			find ${ROOTRUN} -type f -print -exec ${CAT} {} \;
+			find ${ROOTRUN} -type f -name .value -print -exec ${CAT} {} \;
 		fi
 		;;
 
