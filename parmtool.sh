@@ -5,11 +5,11 @@
 
 ZERO=`basename $0`
 
-ROOTETC=${PARMTOOLETC:-"/etc/parmtool/db"}
-ROOTRUN=${PARMTOOLRUN:-"/run/parmtool/db"}
+ROOTETC=${PARMTOOLETC:-"${HOME}/.parmtool/db"}
+ROOTRUN=${PARMTOOLRUN:-"/tmp/${LOGNAME}/parmtool/db"}
 CAT=${PARMTOOLCAT:-"cat"}
 
-while getopts "hLlrwW" OPT; do
+while getopts "hLlr:w:W:" OPT; do
 
 	case ${OPT} in
 
@@ -108,7 +108,7 @@ while getopts "hLlrwW" OPT; do
 		KEYWORD=`echo "${OPTARG}" | awk -F '=' '{ print $1; }'`
 		VALUE=`echo "${OPTARG}" | awk -F '=' '{ print $2; }'`
 		PATHR="${KEYWORD//\.//}"
-		FILER="${ROOTRRUN}/${PATHR}"
+		FILER="${ROOTRUN}/${PATHR}"
 		ROOTR=`dirname ${FILER}`
 		test -d ${ROOTR} || mkdir -p ${ROOTR}
 		TEMPR=`mktemp ${FILER}.XXXXXXXX`
@@ -119,7 +119,7 @@ while getopts "hLlrwW" OPT; do
 		KEYWORD=`echo "${OPTARG}" | awk -F '=' '{ print $1; }'`
 		VALUE=`echo "${OPTARG}" | awk -F '=' '{ print $2; }'`
 		PATHE="${KEYWORD//\.//}"
-		FILEE="${ROOTEETC}/${PATHE}"
+		FILEE="${ROOTETC}/${PATHE}"
 		ROOTE=`dirname ${FILEE}`
 		test -d ${ROOTE} || mkdir -p ${ROOTE}
 		TEMPE=`mktemp ${FILEE}.XXXXXXXX`
