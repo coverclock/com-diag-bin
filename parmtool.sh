@@ -9,12 +9,20 @@ ROOTETC=${PARMTOOLETC:-"${HOME}/.parmtool/db"}
 ROOTRUN=${PARMTOOLRUN:-"/tmp/${LOGNAME}/parmtool/db"}
 CAT=${PARMTOOLCAT:-"cat"}
 
-while getopts "hLld:r:w:W:X" OPT; do
+while getopts "hLlcd:r:w:CW:X" OPT; do
 
 	case ${OPT} in
 
 	h)
 		echo "${ZERO} [ -L | -l | -X | -r KEYWORD | -d KEYWORD | -w KEYWORD=VALUE | -W KEYWORD=VALUE ]" 1>&2
+		;;
+
+	C)
+		rm -rf ${ROOTETC}
+		;;
+
+	c)
+		rm -rf ${ROOTRUN}
 		;;
 
 	L)
@@ -108,7 +116,7 @@ while getopts "hLld:r:w:W:X" OPT; do
 				(
 					cd ${ROOTR}
 					if [ -d ${PATH1} ]; then
-						find ${PATH1} -type f -print
+						find ${PATH1} -type f -name .value -print
 					fi
 				) >> ${TEMP0}
 			fi
@@ -116,7 +124,7 @@ while getopts "hLld:r:w:W:X" OPT; do
 				(
 					cd ${ROOTE}
 					if [ -d ${PATH1} ]; then
-						find ${PATH1} -type f -print
+						find ${PATH1} -type f -name .value -print
 					fi
 				) >> ${TEMP0}
 			fi
@@ -124,11 +132,12 @@ while getopts "hLld:r:w:W:X" OPT; do
 			sort < ${TEMP0} | uniq > ${TEMP1}
 			rm -f ${TEMP0}
 			while read PATH2; do
-				PATHR="${ROOTR}/${PATH2}"
+				PATH3="${PATH2%/.value}"
+				PATHR="${ROOTR}/${PATH3}"
 				FILER="${PATHR}/.value"
-				PATHE="${ROOTE}/${PATH2}"
+				PATHE="${ROOTE}/${PATH3}"
 				FILEE="${PATHE}/.value"
-				KEYWORD="${PATH2//\//.}"
+				KEYWORD="${PATH3//\//.}"
 				if [ -f ${FILER} ]; then
 					while read VALUE; do
 						echo ${KEYWORD} = ${VALUE}
