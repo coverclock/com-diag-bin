@@ -9,12 +9,12 @@ ROOTETC=${PARMTOOLETC:-"${HOME}/.parmtool/db"}
 ROOTRUN=${PARMTOOLRUN:-"/tmp/${LOGNAME}/parmtool/db"}
 CAT=${PARMTOOLCAT:-"cat"}
 
-while getopts "hLlcd:r:w:CW:X" OPT; do
+while getopts "hLlcd:n:r:w:CW:X" OPT; do
 
 	case ${OPT} in
 
 	h)
-		echo "${ZERO} [ -L | -l | -X | -r KEYWORD | -d KEYWORD | -w KEYWORD=VALUE | -W KEYWORD=VALUE ]" 1>&2
+		echo "usage: ${ZERO} [ -L | -l | -X | -r KEYWORD | -d KEYWORD | -w KEYWORD=VALUE | -W KEYWORD=VALUE | -C | -c ]" 1>&2
 		;;
 
 	C)
@@ -26,18 +26,20 @@ while getopts "hLlcd:r:w:CW:X" OPT; do
 		;;
 
 	L)
-		if [ -d ${ROOTETC} ]; then
-			find ${ROOTETC} -type f -print
+		ROOTR="${ROOTRUN}"
+		ROOTE="${ROOTETC}"
+		if [ -d ${ROOTE} ]; then
+			find ${ROOTE} -type f -print
 		fi
-		if [ -d ${ROOTRUN} ]; then
-			find ${ROOTRUN} -type f -print
+		if [ -d ${ROOTR} ]; then
+			find ${ROOTR} -type f -print
 		fi
 		;;
 
 	l)
 		ROOTR="${ROOTRUN}"
 		ROOTE="${ROOTETC}"
-		if [ -d ${FILER} -o -d ${FILEE} ]; then
+		if [ -d ${ROOTR} -o -d ${ROOTE} ]; then
 			TEMP0=`mktemp /tmp/${FILE}.XXXXXXXX`
 			if [ -d ${ROOTR} ]; then
 				( cd ${ROOTR}; find . -type f -name .value -print ) >> ${TEMP0}
