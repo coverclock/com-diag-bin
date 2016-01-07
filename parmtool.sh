@@ -11,7 +11,6 @@ ROOTRUN=${PARMTOOLRUN:-"/tmp/${LOGNAME}/parmtool/db"}
 CAT=${PARMTOOLCAT:-"cat"}
 
 function parmtool_reader {
-	local KEYWORD
 	local VALUE
 	local LATCH=0
 
@@ -37,7 +36,7 @@ while getopts "hLlcd:n:r:w:CW:X" OPT; do
 	case ${OPT} in
 
 	h)
-		echo "usage: ${ZERO} [[ -L | -l | -X | -r KEYWORD | -d KEYWORD | -w KEYWORD=VALUE | -W KEYWORD=VALUE | -C | -c ]]" 1>&2
+		echo "usage: ${ZERO} [ -L | -l | -X | -r KEYWORD | -d KEYWORD | -w KEYWORD=VALUE | -W KEYWORD=VALUE | -C | -c ]" 1>&2
 		;;
 
 	C)
@@ -62,7 +61,7 @@ while getopts "hLlcd:n:r:w:CW:X" OPT; do
 	l)
 		ROOTR="${ROOTRUN}"
 		ROOTE="${ROOTETC}"
-		if [[ -d ${ROOTR} -o -d ${ROOTE} ]]; then
+		if [[ -d ${ROOTR} || -d ${ROOTE} ]]; then
 			TEMP0=`mktemp /tmp/${FILE}.XXXXXXXX`
 			if [[ -d ${ROOTR} ]]; then
 				( cd ${ROOTR}; find . -type f -name .value -print ) >> ${TEMP0}
@@ -128,7 +127,7 @@ while getopts "hLlcd:n:r:w:CW:X" OPT; do
 		elif [[ -f ${FILEE} ]]; then
 			parmtool_reader < ${FILEE}
 			LATCH=0
-		elif [[ -d ${PATHR} -o -d ${PATHE} ]]; then
+		elif [[ -d ${PATHR} || -d ${PATHE} ]]; then
 			TEMP0=`mktemp /tmp/${FILE}.XXXXXXXX`
 			if [[ -d ${ROOTR} ]]; then
 				(
@@ -166,7 +165,7 @@ while getopts "hLlcd:n:r:w:CW:X" OPT; do
 			done < ${TEMP1}
 			rm -f ${TEMP1}
 		else
-			echo "${KEY} = "
+			echo "${KEYWORD} = "
 		fi
 		;;
 	w)
