@@ -11,13 +11,14 @@ ROOTRUN=${PARMTOOLRUN:-"/tmp/${LOGNAME}/parmtool/db"}
 CAT=${PARMTOOLCAT:-"cat"}
 
 function parmtool_reader {
-	local VALUE
+	local KEYWORD="${1}"
+	local VALUE=""
 	local LATCH=0
 
 	while true; do
-		VALUE=""
 		if read VALUE; then
 			echo "${KEYWORD} = ${VALUE}"
+			VALUE=""
 			LATCH=1
 		elif [[ ! -z "${VALUE}" ]]; then
 			echo "${KEYWORD} = ${VALUE}"
@@ -29,6 +30,19 @@ function parmtool_reader {
 			break
 		fi
 	done
+}
+
+function parmtool_writer {
+	local ROOT="${1}"
+	local KEYWORD="${2}"
+	local VALUE="${3}"
+	local PATH0="${KEYWORD//\.//}"
+	local PATH1="${ROOT}/${PATH0}"
+	local FILE="${PATH1}/.value"
+	mkdir -p ${PATH1}
+	local TEMP=`mktemp ${FILE}.XXXXXXXX`
+	echo -n "${VALUE}" > ${TEMP}
+	mv -f ${TEMP} ${FILE}
 }
 
 while getopts "hLlcd:n:r:w:CW:X" OPT; do
@@ -78,9 +92,9 @@ while getopts "hLlcd:n:r:w:CW:X" OPT; do
 				PATH0="${PATH1%/.value}"
 				KEYWORD="${PATH0//\//.}"
 				if [[ -f ${FILER} ]]; then
-					parmtool_reader < ${FILER}
+					parmtool_reader ${KEYWORD} < ${FILER}
 				elif [[ -f ${FILEE} ]]; then
-					parmtool_reader < ${FILEE}
+					parmtool_reader ${KEYWORD} < ${FILEE}
 				else
 					:
 				fi
@@ -123,9 +137,9 @@ while getopts "hLlcd:n:r:w:CW:X" OPT; do
 		PATHE="${ROOTE}/${PATH1}"
 		FILEE="${PATHE}/.value"
 		if [[ -f ${FILER} ]]; then
-			parmtool_reader < ${FILER}
+			parmtool_reader ${KEYWORD} < ${FILER}
 		elif [[ -f ${FILEE} ]]; then
-			parmtool_reader < ${FILEE}
+			parmtool_reader ${KEYWORD} < ${FILEE}
 			LATCH=0
 		elif [[ -d ${PATHR} || -d ${PATHE} ]]; then
 			TEMP0=`mktemp /tmp/${FILE}.XXXXXXXX`
@@ -156,9 +170,9 @@ while getopts "hLlcd:n:r:w:CW:X" OPT; do
 				FILEE="${PATHE}/.value"
 				KEYWORD="${PATH3//\//.}"
 				if [[ -f ${FILER} ]]; then
-					parmtool_reader < ${FILER}
+					parmtool_reader ${KEYWORD} < ${FILER}
 				elif [[ -f ${FILEE} ]]; then
-					parmtool_reader < ${FILEE}
+					parmtool_reader ${KEYWORD} < ${FILEE}
 				else
 					:
 				fi
@@ -170,25 +184,13 @@ while getopts "hLlcd:n:r:w:CW:X" OPT; do
 		;;
 	w)
 		KEYWORD="${OPTARG%%=*}"
-		VALUE="${OPTARG##*=}"
-		PATH0="${KEYWORD//\.//}"
-		PATHR="${ROOTRUN}/${PATH0}"
-		FILER="${PATHR}/.value"
-		mkdir -p ${PATHR}
-		TEMPR=`mktemp ${FILER}.XXXXXXXX`
-		echo -n "${VALUE}" > ${TEMPR}
-		mv -f ${TEMPR} ${FILER}
+		VALUE="${OPTARG#*=}"
+		parmtool_writer ${ROOTRUN} ${KEYWORD} ${VALUE}
 		;;
 	W)
 		KEYWORD="${OPTARG%%=*}"
-		VALUE="${OPTARG##*=}"
-		PATH0="${KEYWORD//\.//}"
-		PATHE="${ROOTETC}/${PATH0}"
-		FILEE="${PATHE}/.value"
-		mkdir -p ${PATHE}
-		TEMPE=`mktemp ${FILEE}.XXXXXXXX`
-		echo -n "${VALUE}" > ${TEMPE}
-		mv -f ${TEMPE} ${FILEE}
+		VALUE="${OPTARG#*=}"
+		parmtool_writer ${ROOTETC} ${KEYWORD} ${VALUE}
 		;;
 
 	X)

@@ -41,8 +41,8 @@ echo $PATH | grep -q "$NEWPATH" || export PATH=$NEWPATH:$PATH
 #NEWPATH="${HOME}/Projects/petticoat/depot_tools"
 #echo $PATH | grep -q "$NEWPATH" || export PATH=$NEWPATH:$PATH
 
-NEWPATH="${HOME}/Projects/betty/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin"
-echo $PATH | grep -q "$NEWPATH" || export PATH=$NEWPATH:$PATH
+#NEWPATH="${HOME}/Projects/betty/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin"
+#echo $PATH | grep -q "$NEWPATH" || export PATH=$NEWPATH:$PATH
 
 export ARCH=arm
 export CROSS_COMPILE=arm-linux-gnueabihf-
