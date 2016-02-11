@@ -6,19 +6,22 @@
 #
 # USAGE
 #
-# parmtool [ -L | -l | -x | -X COMMAND | -r KEYWORD | -d KEYWORD | -w KEYWORD=VALUE | -W KEYWORD=VALUE | -C | -c ]
+# parmtool [ -L | -l | -x | -X COMMAND | -r KEYWORD | -d KEYWORD | -w KEYWORD=VALUE | -W KEYWORD=VALUE | -u KEYWORD=VALUE | -C | -c ]
 #
 # OPTIONS
 #
 # EXAMPLE
 #
 # ABSTRACT
+#
 
 ZERO=`basename $0`
 
 ROOTETC=${PARMTOOLETC:-"${HOME}/.parmtool/db"}
-ROOTRUN=${PARMTOOLRUN:-"/tmp/${LOGNAME}/parmtool/db"}
+ROOTRUN=${PARMTOOLRUN:-"/tmp/${LOGNAME}/.parmtool/db"}
 CAT=${PARMTOOLCAT:-"cat"}
+
+RC=0
 
 function parmtool_consumer {
 	local KEYWORD="${1}"
@@ -199,12 +202,27 @@ function parmtool_applier {
 	fi
 }
 
-while getopts "hCcLld:r:w:W:xX:" OPT; do
+function parmtool_updater {
+	local ROOTR="${1}"
+	local ROOTE="${2}"
+	local ROOT="${3}"
+	local KEYWORD="${4}"
+	local VALUE="${5}"
+	local BUFFER=$(parmtool_reader ${ROOTR} ${ROOTE} ${KEYWORD})
+	if [[ "${BUFFER#*= }" != "${VALUE}" ]]; then
+		parmtool_writer ${ROOT} ${KEYWORD} ${VALUE}
+		RC=0
+	else
+		RC=2
+	fi
+}
+
+while getopts "hCcLld:r:w:u:U:W:xX:" OPT; do
 
 	case ${OPT} in
 
 	h)
-		echo "usage: ${ZERO} [ -L | -l | -x | -X COMMAND | -r KEYWORD | -d KEYWORD | -w KEYWORD=VALUE | -W KEYWORD=VALUE | -C | -c ]" 1>&2
+		echo "usage: ${ZERO} [ -L | -l | -x | -X COMMAND | -r KEYWORD | -d KEYWORD | -w KEYWORD=VALUE | -W KEYWORD=VALUE | -u KEYWORD=VALUE | -U KEYWORD=VALUE | -C | -c ]" 1>&2
 		;;
 
 	C)
@@ -230,7 +248,17 @@ while getopts "hCcLld:r:w:W:xX:" OPT; do
 
 	r)
 		KEYWORD="${OPTARG%%=*}"
-		pathtool_reader ${ROOTRUN} ${ROOTETC} ${KEYWORD}
+		parmtool_reader ${ROOTRUN} ${ROOTETC} ${KEYWORD}
+		;;
+	u)
+		KEYWORD="${OPTARG%%=*}"
+		VALUE="${OPTARG#*=}"
+		parmtool_updater ${ROOTRUN} ${ROOTETC} ${ROOTRUN} ${KEYWORD} ${VALUE}
+		;;
+	U)
+		KEYWORD="${OPTARG%%=*}"
+		VALUE="${OPTARG#*=}"
+		parmtool_updater ${ROOTRUN} ${ROOTETC} ${ROOTETC} ${KEYWORD} ${VALUE}
 		;;
 	w)
 		KEYWORD="${OPTARG%%=*}"
@@ -256,4 +284,4 @@ while getopts "hCcLld:r:w:W:xX:" OPT; do
 
 done
 
-exit 0
+exit ${RC}
