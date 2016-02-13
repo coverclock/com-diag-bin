@@ -23,10 +23,37 @@ function critical_section_end {
 
 # Unit Tests
 
-ls /proc/self/fd 1>&2
 LOCKFILE=$(mktemp /tmp/$(basename $0).XXXXXXXXXX)
+ls /proc/self/fd 1>&2
 critical_section_begin ${LOCKFILE}
 	ls /proc/self/fd 1>&2
 critical_section_end ${LOCKFILE}
 ls /proc/self/fd 1>&2
+rm ${LOCKFILE}
+
+LOCKFILE=$(mktemp /tmp/$(basename $0).XXXXXXXXXX)
+(
+	echo "A1"
+	critical_section_begin ${LOCKFILE}
+		echo "A2"
+		sleep 5
+		echo "A3"
+	critical_section_end ${LOCKFILE}
+	echo "A4"
+) &
+A=$!
+(
+	echo "B1"
+	critical_section_begin ${LOCKFILE}
+		echo "B2"
+		sleep 5
+		echo "B3"
+	critical_section_end ${LOCKFILE}
+	echo "B4"
+) &
+B=$!
+wait ${B}
+echo "B0"
+wait ${A}
+echo "A0"
 rm ${LOCKFILE}
