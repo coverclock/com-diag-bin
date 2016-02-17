@@ -5,20 +5,20 @@
 
 function critical_section_begin {
 	local FILE=${1}
-	local TIMEOUT=${2:-10}
+	local WAIT=${2:-10}
 	local LIST=($(ls /proc/self/fd))
-	local MUTEX=$((${LIST[-1]}+1))
-	eval "exec ${MUTEX}> ${FILE}"
-	eval "echo ${MUTEX} 1>&${MUTEX}"
-	flock -x -w ${TIMEOUT} ${MUTEX}
+	local FD=$((${LIST[-1]}+1))
+	eval "exec ${FD}> ${FILE}"
+	flock -x -w ${WAIT} ${FD}
+	eval "echo ${FD} 1>&${FD}"
 }
 
 function critical_section_end {
 	local FILE=${1}
-	local MUTEX
-	read MUTEX < ${FILE}
-	flock -u ${MUTEX}
-	eval "exec ${MUTEX}>&-"
+	local FD
+	read FD < ${FILE}
+	flock -u ${FD}
+	eval "exec ${FD}>&-"
 }
 
 function UNITTEST_1_critical_section {
