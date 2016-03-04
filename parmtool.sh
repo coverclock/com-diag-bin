@@ -6,7 +6,7 @@
 #
 # USAGE
 #
-# parmtool [ -L | -l | -x | -X COMMAND | -r KEYWORD | -d KEYWORD | -w KEYWORD=VALUE | -W KEYWORD=VALUE | -u KEYWORD=VALUE | -C | -c ]
+# parmtool [ -L | -l | -a | -A COMMAND | -r KEYWORD | -d KEYWORD | [ -m MODE ] [ -w KEYWORD=VALUE | -W KEYWORD=VALUE | -u KEYWORD=VALUE | -U KEYWORD=VALUE ] | -C | -c ]
 #
 # OPTIONS
 #
@@ -18,8 +18,9 @@
 ZERO=`basename $0`
 
 ROOTETC=${PARMTOOLETC:-"${HOME}/.parmtool/db"}
-ROOTRUN=${PARMTOOLRUN:-"/tmp/${LOGNAME}/.parmtool/db"}
+ROOTRUN=${PARMTOOLRUN:-"/var/tmp/${LOGNAME}/.parmtool/db"}
 CAT=${PARMTOOLCAT:-"cat"}
+MODE=${PARMTOOLMODE:-""}
 
 RC=0
 
@@ -114,6 +115,9 @@ function parmtool_writer {
 	mkdir -p ${PATH1}
 	local TEMP=`mktemp ${FILE}.XXXXXXXX`
 	echo -n "${VALUE}" > ${TEMP}
+	if [[ -n "${MODE}" ]]; then
+		chmod ${MODE} ${TEMP}
+	fi
 	mv -f ${TEMP} ${FILE}
 }
 
@@ -217,12 +221,21 @@ function parmtool_updater {
 	fi
 }
 
-while getopts "hCcLld:r:w:u:U:W:xX:" OPT; do
+while getopts "hA:aCcLld:r:m:w:u:U:W:" OPT; do
 
 	case ${OPT} in
 
 	h)
-		echo "usage: ${ZERO} [ -L | -l | -x | -X COMMAND | -r KEYWORD | -d KEYWORD | -w KEYWORD=VALUE | -W KEYWORD=VALUE | -u KEYWORD=VALUE | -U KEYWORD=VALUE | -C | -c ]" 1>&2
+		echo "usage: ${ZERO} [ -L | -l | -a | -A COMMAND | -r KEYWORD | -d KEYWORD | [ -m MODE [ -w KEYWORD=VALUE | -W KEYWORD=VALUE | -u KEYWORD=VALUE | -U KEYWORD=VALUE ] | -C | -c ]" 1>&2
+		;;
+
+	a)
+		parmtool_applier ${ROOTRUN} ${ROOTETC} "${CAT}"
+		;;
+
+	A)
+		COMMAND="${OPTARG}"
+		parmtool_applier ${ROOTRUN} ${ROOTETC} "${COMMAND}"
 		;;
 
 	C)
@@ -239,6 +252,10 @@ while getopts "hCcLld:r:w:u:U:W:xX:" OPT; do
 
 	l)
 		parmtool_lister ${ROOTRUN} ${ROOTETC}
+		;;
+
+	m)
+		MODE="${OPTARG}"
 		;;
 
 	d)
@@ -269,15 +286,6 @@ while getopts "hCcLld:r:w:u:U:W:xX:" OPT; do
 		KEYWORD="${OPTARG%%=*}"
 		VALUE="${OPTARG#*=}"
 		parmtool_writer ${ROOTETC} ${KEYWORD} ${VALUE}
-		;;
-
-	x)
-		parmtool_applier ${ROOTRUN} ${ROOTETC} "${CAT}"
-		;;
-
-	X)
-		COMMAND="${OPTARG}"
-		parmtool_applier ${ROOTRUN} ${ROOTETC} "${COMMAND}"
 		;;
 
 	esac
