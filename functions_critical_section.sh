@@ -44,10 +44,10 @@ function critical_section_begin {
 	COM_DIAG_MUTEX_DEPTH=$((${COM_DIAG_MUTEX_DEPTH} + 1))
 	if [[ -n "${FD}" ]]; then
 		eval "COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=${FD}"
-		true
+		return 0
 	else
 		eval "COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}="
-		false
+		return 1
 	fi
 }
 

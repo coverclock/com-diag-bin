@@ -5,6 +5,8 @@
 
 . $(dirname $(basename $0))/functions_critical_section.sh
 
+################################################################################
+
 function UNITTEST_0_critical_section {
 	MUTEX1=$(mktemp /tmp/$(basename $0).XXXXXXXXXX)
 	MUTEX2=$(mktemp /tmp/$(basename $0).XXXXXXXXXX)
@@ -34,6 +36,8 @@ function UNITTEST_0_critical_section {
 echo "UNITTEST_0_critical_section"
 UNITTEST_0_critical_section
 
+################################################################################
+
 function UNITTEST_1_critical_section {
 	MUTEX=$(mktemp /tmp/$(basename $0).XXXXXXXXXX)
 	ls /proc/self/fd 1>&2
@@ -41,11 +45,13 @@ function UNITTEST_1_critical_section {
 		ls /proc/self/fd 1>&2
 	critical_section_end
 	ls /proc/self/fd 1>&2
-	rm ${MUTEX}
+	rm -f ${MUTEX}
 }
 
 echo "UNITTEST_1_critical_section"
 UNITTEST_1_critical_section
+
+################################################################################
 
 function UNITTEST_2_critical_section {
 	MUTEX=$(mktemp /tmp/$(basename $0).XXXXXXXXXX)
@@ -75,8 +81,70 @@ function UNITTEST_2_critical_section {
 	echo "B0"
 	wait ${A}
 	echo "A0"
-	rm ${MUTEX}
+	rm -f ${MUTEX}
 }
 
 echo "UNITTEST_2_critical_section"
 UNITTEST_2_critical_section
+
+################################################################################
+
+function UNITTEST_3_critical_section {
+	MUTEX=$(mktemp /tmp/$(basename $0).XXXXXXXXXX)
+	echo A0
+	echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
+	eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
+	critical_section_begin ${MUTEX} 10
+		echo B1
+		echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
+		eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
+		critical_section_begin ${MUTEX} 10
+			echo C2
+			echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
+			eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
+		critical_section_end
+		echo B3
+		echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
+		eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
+	critical_section_end
+	echo A4
+	echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
+	eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
+	rm -f ${MUTEX}
+}
+
+echo "UNITTEST_3_critical_section"
+UNITTEST_3_critical_section
+
+################################################################################
+
+function UNITTEST_4_critical_section {
+	MUTEX=$(mktemp /tmp/$(basename $0).XXXXXXXXXX)
+	echo A0
+	echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
+	eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
+	if critical_section_begin ${MUTEX} 10; then
+		echo B1
+		echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
+		eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
+		if critical_section_begin ${MUTEX} 10; then
+			echo C2
+			echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
+			eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
+			critical_section_end
+		fi
+		echo B3
+		echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
+		eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
+		critical_section_end
+	fi
+	echo A4
+	echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
+	eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
+	rm -f ${MUTEX}
+}
+
+echo "UNITTEST_4_critical_section"
+UNITTEST_4_critical_section
+
+################################################################################
