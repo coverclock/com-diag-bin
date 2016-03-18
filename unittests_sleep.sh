@@ -12,32 +12,32 @@ fi
 
 ################################################################################
 
-function UNITTEST_0_interruptible_sleep {
+function UNITTEST_0_com_diag_sleep_interruptible {
 	for II in 0 1 2 3 4 55 6 7 8 9; do
 		BEFORE=$(elapsedtime 1)
-		interruptible_sleep 10
+		com_diag_sleep_interruptible 10
 		AFTER=$(elapsedtime 1)
 		echo $((${AFTER} - ${BEFORE}))
 	done
 }
 
-echo UNITTEST_0_interruptible_sleep
-UNITTEST_0_interruptible_sleep;
+echo UNITTEST_0_com_diag_sleep_interruptible
+UNITTEST_0_com_diag_sleep_interruptible;
 
 ################################################################################
 
-function UNITTEST_1_unjittered_sleep {
+function UNITTEST_1_com_diag_sleep_unjittered {
 	JITTER=1
 	for II in 0 1 2 3 4 55 6 7 8 9; do
 		EPOCH=$(elapsedtime  1)
 		date
 		sleep ${JITTER}
 		JITTER=$((4 - ${JITTER}))
-		unjittered_sleep ${EPOCH} 5
+		com_diag_sleep_unjittered ${EPOCH} 5
 	done
 }
 
-echo UNITTEST_1_unjittered_sleep
-UNITTEST_1_unjittered_sleep
+echo UNITTEST_1_com_diag_sleep_unjittered
+UNITTEST_1_com_diag_sleep_unjittered
 
 ################################################################################

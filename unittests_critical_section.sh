@@ -7,25 +7,25 @@
 
 ################################################################################
 
-function UNITTEST_0_critical_section {
+function UNITTEST_0_com_diag_critical_section {
 	MUTEX1=$(mktemp /tmp/$(basename $0).XXXXXXXXXX)
 	MUTEX2=$(mktemp /tmp/$(basename $0).XXXXXXXXXX)
 	echo A0
 	echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
 	eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
-	critical_section_begin ${MUTEX1}
+	com_diag_critical_section_begin ${MUTEX1}
 		echo B1
 		echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
 		eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
-		critical_section_begin ${MUTEX2}
+		com_diag_critical_section_begin ${MUTEX2}
 			echo C2
 			echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
 			eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
-		critical_section_end
+		com_diag_critical_section_end
 		echo B3
 		echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
 		eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
-	critical_section_end
+	com_diag_critical_section_end
 	echo A4
 	echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
 	eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
@@ -33,47 +33,47 @@ function UNITTEST_0_critical_section {
 	rm -f ${MUTEX1}
 }
 
-echo "UNITTEST_0_critical_section"
-UNITTEST_0_critical_section
+echo "UNITTEST_0_com_diag_critical_section"
+UNITTEST_0_com_diag_critical_section
 
 ################################################################################
 
-function UNITTEST_1_critical_section {
+function UNITTEST_1_com_diag_critical_section {
 	MUTEX=$(mktemp /tmp/$(basename $0).XXXXXXXXXX)
 	ls /proc/self/fd 1>&2
-	critical_section_begin ${MUTEX}
+	com_diag_critical_section_begin ${MUTEX}
 		ls /proc/self/fd 1>&2
-	critical_section_end
+	com_diag_critical_section_end
 	ls /proc/self/fd 1>&2
 	rm -f ${MUTEX}
 }
 
-echo "UNITTEST_1_critical_section"
-UNITTEST_1_critical_section
+echo "UNITTEST_1_com_diag_critical_section"
+UNITTEST_1_com_diag_critical_section
 
 ################################################################################
 
-function UNITTEST_2_critical_section {
+function UNITTEST_2_com_diag_critical_section {
 	MUTEX=$(mktemp /tmp/$(basename $0).XXXXXXXXXX)
 	(
 		echo "A1"
-		critical_section_begin ${MUTEX}
+		com_diag_critical_section_begin ${MUTEX}
 			echo "A2"
 			echo "OWNER=$(cat ${MUTEX})"
 			sleep 5
 			echo "A3"
-		critical_section_end
+		com_diag_critical_section_end
 		echo "A4"
 	) &
 	A=$!
 	(
 		echo "B1"
-		critical_section_begin ${MUTEX}
+		com_diag_critical_section_begin ${MUTEX}
 			echo "B2"
 			echo "OWNER=$(cat ${MUTEX})"
 			sleep 5
 			echo "B3"
-		critical_section_end
+		com_diag_critical_section_end
 		echo "B4"
 	) &
 	B=$!
@@ -84,59 +84,59 @@ function UNITTEST_2_critical_section {
 	rm -f ${MUTEX}
 }
 
-echo "UNITTEST_2_critical_section"
-UNITTEST_2_critical_section
+echo "UNITTEST_2_com_diag_critical_section"
+UNITTEST_2_com_diag_critical_section
 
 ################################################################################
 
-function UNITTEST_3_critical_section {
+function UNITTEST_3_com_diag_critical_section {
 	MUTEX=$(mktemp /tmp/$(basename $0).XXXXXXXXXX)
 	echo A0
 	echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
 	eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
-	critical_section_begin ${MUTEX} 10
+	com_diag_critical_section_begin ${MUTEX} 10
 		echo B1
 		echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
 		eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
-		critical_section_begin ${MUTEX} 10
+		com_diag_critical_section_begin ${MUTEX} 10
 			echo C2
 			echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
 			eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
-		critical_section_end
+		com_diag_critical_section_end
 		echo B3
 		echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
 		eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
-	critical_section_end
+	com_diag_critical_section_end
 	echo A4
 	echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
 	eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
 	rm -f ${MUTEX}
 }
 
-echo "UNITTEST_3_critical_section"
-UNITTEST_3_critical_section
+echo "UNITTEST_3_com_diag_critical_section"
+UNITTEST_3_com_diag_critical_section
 
 ################################################################################
 
-function UNITTEST_4_critical_section {
+function UNITTEST_4_com_diag_critical_section {
 	MUTEX=$(mktemp /tmp/$(basename $0).XXXXXXXXXX)
 	echo A0
 	echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
 	eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
-	if critical_section_begin ${MUTEX} 10; then
+	if com_diag_critical_section_begin ${MUTEX} 10; then
 		echo B1
 		echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
 		eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
-		if critical_section_begin ${MUTEX} 10; then
+		if com_diag_critical_section_begin ${MUTEX} 10; then
 			echo C2
 			echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
 			eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
-			critical_section_end
+			com_diag_critical_section_end
 		fi
 		echo B3
 		echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
 		eval "echo COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
-		critical_section_end
+		com_diag_critical_section_end
 	fi
 	echo A4
 	echo COM_DIAG_MUTEX_DEPTH=${COM_DIAG_MUTEX_DEPTH}
@@ -144,7 +144,7 @@ function UNITTEST_4_critical_section {
 	rm -f ${MUTEX}
 }
 
-echo "UNITTEST_4_critical_section"
-UNITTEST_4_critical_section
+echo "UNITTEST_4_com_diag_critical_section"
+UNITTEST_4_com_diag_critical_section
 
 ################################################################################

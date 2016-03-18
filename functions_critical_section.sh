@@ -5,25 +5,25 @@
 #
 # USAGE
 #
-# critical_section_begin LOCKFILE
+# com_diag_critical_section_begin LOCKFILE
 # critical_Section_end
 #
 # EXAMPLE
 #
-# critical_section_begin /var/run/$(basename $0)_mutex1
+# com_diag_critical_section_begin /var/run/$(basename $0)_mutex1
 #	:
-#	critical_section_begin /var/run/$(basename $0)_mutex2
+#	com_diag_critical_section_begin /var/run/$(basename $0)_mutex2
 #		:
-#	critical_section_end
+#	com_diag_critical_section_end
 #	:
-# critical_section_end
+# com_diag_critical_section_end
 #
 # ABSTRACT
 #
 # Implements critical sections in bash(1) scripts using flock(1).
 #
 
-function critical_section_begin {
+function com_diag_critical_section_begin {
 	local FILE=${1}
 	local LIST=($(ls /proc/self/fd))
 	local FD=$((${LIST[-1]}+1))
@@ -51,7 +51,7 @@ function critical_section_begin {
 	fi
 }
 
-function critical_section_end {
+function com_diag_critical_section_end {
 	if [[ -n "${COM_DIAG_MUTEX_DEPTH}" ]]; then
 		eval "local FD=\$COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}"
 		if [[ -n "${FD}" ]]; then

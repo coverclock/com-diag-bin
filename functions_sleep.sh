@@ -3,7 +3,7 @@
 # Copyright 2016 by the Digital Aggregates Corporation, Colorado, USA.
 # Licensed under the GPLv2.
 
-function interruptible_sleep {
+function com_diag_sleep_interruptible {
 	local SLEEP=${1:-0}
 	sleep ${SLEEP} &
 	local PID=$!
@@ -11,7 +11,7 @@ function interruptible_sleep {
 	kill ${PID} 2> /dev/null
 }
 
-function unjittered_sleep {
+function com_diag_sleep_unjittered {
 	local THEN=${1}
 	local SLEEP=${2:-0}
 	local MINIMUM=${3:-1}
@@ -23,5 +23,5 @@ function unjittered_sleep {
 	if [[ ${JITTER} -lt ${SLEEP} ]]; then
 		MINIMUM=$(( ${SLEEP} - ${JITTER} ))
 	fi
-	interruptible_sleep ${MINIMUM}
+	com_diag_sleep_interruptible ${MINIMUM}
 }
