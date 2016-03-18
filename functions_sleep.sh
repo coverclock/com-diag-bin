@@ -25,23 +25,3 @@ function unjittered_sleep {
 	fi
 	interruptible_sleep ${MINIMUM}
 }
-
-function UNITTEST_1_interruptible_sleep {
-	while true; do
-		BEFORE=$(elapsedtime 1)
-		interruptible_sleep 10
-		AFTER=$(elapsedtime 1)
-		echo $((${AFTER} - ${BEFORE}))
-	done
-}
-
-function UNITTEST_2_unjittered_sleep {
-	JITTER=1
-	while true; do
-		EPOCH=$(elapsedtime  1)
-		date
-		sleep ${JITTER}
-		JITTER=$((4 - ${JITTER}))
-		unjittered_sleep ${EPOCH} 5
-	done
-}
