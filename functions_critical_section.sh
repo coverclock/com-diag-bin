@@ -6,7 +6,7 @@
 # USAGE
 #
 # com_diag_critical_section_begin LOCKFILE
-# critical_Section_end
+# com_diag_critical_Section_end
 #
 # EXAMPLE
 #
