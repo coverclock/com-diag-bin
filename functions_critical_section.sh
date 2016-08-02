@@ -58,7 +58,7 @@ function com_diag_critical_section_end {
 			flock -u ${FD}
 			eval "exec ${FD}>&-"
 		fi
-		eval "COM_DIAG_MUTEX_FD_$$="
+		eval "COM_DIAG_MUTEX_FD_${COM_DIAG_MUTEX_DEPTH}="
 		COM_DIAG_MUTEX_DEPTH=$((${COM_DIAG_MUTEX_DEPTH} - 1))
 	fi
 }
