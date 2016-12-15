@@ -42,9 +42,12 @@ if [ ! \( -f ${INF} -a -f ${POF} \) ]; then
 					-name '*.hx' -o \
 					-name '*.hxx' -o \
 					-name '*.inl' -o \
+					-name '*.js' -o \
+					-name '*.json' -o \
 					-name '*.ld' -o \
 					-name '*.map' -o \
 					-name '*.mk' -o \
+					-name '*.py' -o \
 					-name '*.rc' -o \
 					-name '*.sh' -o \
 					-name '*.txt' -o \
