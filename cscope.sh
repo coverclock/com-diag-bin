@@ -44,6 +44,7 @@ if [ ! \( -f ${INF} -a -f ${POF} \) ]; then
 					-name '*.inl' -o \
 					-name '*.ld' -o \
 					-name '*.map' -o \
+					-name '*.md' -o \
 					-name '*.mk' -o \
 					-name '*.rc' -o \
 					-name '*.sh' -o \
