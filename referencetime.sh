@@ -1,5 +1,5 @@
 #!/bin/bash
-# Extract the NTP reference time from the NTP server.
+# Extract the NTP reference time - when the clock was last updated -from the NTP server.
 SERVER=${1:-"hourglass"}
 REFTIME=$(ntpq -c "rv 0 reftime" ${SERVER})
 # reftime=dc73db64.0e3e1f16  Wed, Mar 15 2017  9:25:24.055
