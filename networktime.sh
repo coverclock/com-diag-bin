@@ -8,5 +8,5 @@ SERVER=${1:-"localhost"}
 # +	candidate
 # #	selected (but not amongst top six)
 # *	peer
-# .	PPS peer
+# o	PPS peer
 exec ntpq -c peer -c as -c rl ${SERVER}
