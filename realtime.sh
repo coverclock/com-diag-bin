@@ -3,6 +3,8 @@
 SERVER=${1:-"localhost"}
 if [[ "${SERVER}" == "localhost" ]]; then
 	HRDTIME=$(sudo /sbin/hwclock -u -r)
+elif [[ "${SERVER}" == "$(hostname)" ]]; then
+	HRDTIME=$(sudo /sbin/hwclock -u -r)
 else
 	HRDTIME=$(ssh ${SERVER} sudo /sbin/hwclock -u -r)
 fi
