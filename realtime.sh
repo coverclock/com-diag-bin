@@ -13,8 +13,16 @@ FLDTIME=${HRDTIME//:/ }
 # Sun 19 Mar 2017 02 39 37 PM MDT  -0.891855 seconds
 set ${FLDTIME}
 HH=${5}
-if [[ "${8}" == "PM" ]]; then
-	HH=$((${HH} + 12))
+if [[ "${8}" == "AM" ]]; then
+	if [[ ${HH} -eq 12 ]]; then
+		HH="00"
+	fi
+elif [[ "${8}" == "PM" ]]; then
+	if [[ ${HH} -lt 12 ]]; then
+		HH=$((${HH} + 12))
+	fi
+else
+	:
 fi
 STRTIME="${1} ${3} ${2} ${HH}:${6}:${7} ${9} ${4}"
 ISOTIME=$(date -d "${STRTIME}" +"%Y-%m-%d %H:%M:%S.%N %Z")
