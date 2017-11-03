@@ -10,21 +10,23 @@ POF=".cscope.out.po"
 if [ ! \( -f ${INF} -a -f ${POF} \) ]; then
 
 	if [ $# -eq 0 ]; then
+		INC="`${CROSS_COMPILE}gcc -x c -E -v - < /dev/null 2>&1 | grep '^[ ]' | sed 's/^ //' | grep -v ' '`"
 		DIR="."
 	else
+		INC=""
 		DIR="$*"
 	fi
-
-	INC="`${CROSS_COMPILE}gcc -x c -E -v - < /dev/null 2>&1 | grep '^[ ]' | sed 's/^ //' | grep -v ' '`"
 
 	rm -f .cscope.*
 
 	cp /dev/null ${LST}
 
 	(
-		for II in ${INC}; do
-			find -P ${II} -type f -print
-		done
+		if [ "${INC}" != "" ]; then
+			for II in ${INC}; do
+				find -P ${II} -type f -print
+			done
+		fi
 		for DD in ${DIR}; do
 			find -P ${DD} \
 				-type d -name .svn -prune -o \
