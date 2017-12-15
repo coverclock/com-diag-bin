@@ -10,6 +10,7 @@ POF=".cscope.out.po"
 if [ ! \( -f ${INF} -a -f ${POF} \) ]; then
 
 	if [ $# -eq 0 ]; then
+		echo CROSS_COMPILE="${CROSS_COMPILE}" 1>&2
 		INC="`${CROSS_COMPILE}gcc -x c -E -v - < /dev/null 2>&1 | grep '^[ ]' | sed 's/^ //' | grep -v ' '`"
 		DIR="."
 	else
@@ -24,6 +25,7 @@ if [ ! \( -f ${INF} -a -f ${POF} \) ]; then
 	(
 		if [ "${INC}" != "" ]; then
 			for II in ${INC}; do
+				echo INCLUDE="${II}" 1>&2
 				find -P ${II} -type f -print
 			done
 		fi
