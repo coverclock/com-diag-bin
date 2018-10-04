@@ -6,4 +6,4 @@
 PKG=${1:-"harness"}
 export GOPATH="${HOME}/go"
 cd ${GOPATH}/src
-vim github.com/coverclock/com-diag-vamoose/Vamoose/pkg/${PKG}
+vim github.com/coverclock/com-diag-vamoose/Vamoose/pkg/${PKG}/${PKG}.go
