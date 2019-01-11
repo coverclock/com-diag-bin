@@ -8,7 +8,16 @@ Copyright 2019 by the Digital Aggregates Corporation, Colorado, USA.
 
 ## License
 
-Licensed under the terms of 
+Original content licensed under the terms of the GNU GPL 2.0.
+
+## Contact
+
+Chip Overclock  
+<mailto:coverclock@diag.com>  
+Digital Aggregates Corporation  
+<http://www.diag.com>  
+3440 Youngfield Street, Suite 209  
+Wheat Ridge CO 80033 USA  
 
 ## Abstract
 
@@ -41,11 +50,14 @@ Broadcom BCM2837B0 Cortex-A53 @ 1.4GHz x 4
     export AGL_TOP=`pwd`
     repo init -b eel -m eel_5.1.0.xml -u https://gerrit.automotivelinux.org/gerrit/AGL/AGL-repo
     repo sync
+    # (Must be a Raspberry Pi 3B *not* a 3B+)
     source meta-agl/scripts/aglsetup.sh -f -m raspberrypi3 agl-demo agl-netboot agl-appfw-smack agl-devel
-    # cd build
+    # (Script does a 'cd build'.)
     bitbake agl-demo-platform
     cd tmp/deploy/images/raspberrypi3
-    xzcat agl-demo-platform-raspberrypi3.rpi-sdimg.xz | sudo dd of=/dev/sdb bs=4M status=progress conv=fsync
+    tail -f /var/log/syslog
+    # (Insert SD card into build host; I use a USB adapter. Check device.)
+    xzcat agl-demo-platform-raspberrypi3.wic.xz | sudo dd of=/dev/sdb bs=4M status=progress conv=fsync
     sudo parted -s /dev/sdb resizepart 2 '100%'
     sudo e2fsck -f /dev/sdb2
     sudo resize2fs /dev/sdb2
