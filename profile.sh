@@ -102,3 +102,7 @@ alias rm="rm -i"
 #export LD_DEBUG=files
 
 umask 022
+
+# This majik is needed for GNU Octave.
+export GTK_MODULES=gail:atk-bridge:unity-gtk-module 
+export GNOME_DESKTOP_SESSION_ID=this-is-depricated 
