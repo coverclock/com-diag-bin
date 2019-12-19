@@ -1,12 +1,12 @@
 #!/bin/bash
 # Copyright 2019 Digital Aggregates Corporation, Arvada CO USA.
-# usage: backuppiimage.sh /dev/sdc /mnt/framistat.gz 4M
+# usage: restorepiimage.sh /mnt/framistat.gz /dev/sdc 4M
 # N.B. If it works at all, it will only do so with the same SD card.
-DEV=${1:-"/dev/null"}
-ZIP=${2:-"/dev/null"}
+ZIP=${1:-"/dev/null"}
+DEV=${2:-"/dev/null"}
 BLK=${3:-"4M"}
-CMD="sudo dd bs=${BLK} if=${DEV} | gzip > ${ZIP}"
-test -f ${ZIP} && exit 2
+CMD="gunzip --stdout ${ZIP} | sudo dd bs=${BLK} of=${DEV} conv=fsync"
+test -f ${ZIP} || exit 2
 test -b ${DEV} || exit 2
 echo "${CMD}" 1>&2
 echo -n "[yN]? "
