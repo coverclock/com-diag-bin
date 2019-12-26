@@ -7,20 +7,19 @@ NAM=$(basename $0 .sh)
 SYS=$(hostname)
 BAK=${1:-"/mnt/pi/${SYS}"}
 TIM=$(date -u +%Y%m%dT%H%M%SZ)
-ONE="${BAK}/boot"
-TWO="${BAK}/root"
-LOG="${BAK}/${TIM}.log"
+ONE="${BAK}/"
+TWO="${BAK}/root/"
 ROT="/"
 BOT="/boot"
+EXC="${BAK}/${NAM}-${TIM}.exc"
+LOG="${BAK}/${NAM}-${TIM}.log"
 
 test -d ${ROT} || exit 2
 test -d ${BOT} || exit 2
 
-sudo mkdir -p ${ONE} || exit 2
-sudo mkdir -p ${TWO} || exit 2
+mkdir -p ${ONE} || exit 2
+mkdir -p ${TWO} || exit 2
 
-EXC=$(mktemp ${TMPDIR:="/tmp"}/${NAM}-${SYS}.exc.XXXXXXXXXX)
-trap "rm -f ${EXC}" HUP INT TERM EXIT
 cat << EOF > ${EXC}
 /boot/*
 /dev/*
@@ -32,16 +31,12 @@ cat << EOF > ${EXC}
 /tmp/*
 EOF
 
-ERR=$(mktemp ${TMPDIR:="/tmp"}/${NAM}-${SYS}.err.XXXXXXXXXX)
-cp /dev/null ${ERR}
-exec 2>>${ERR}
+cp /dev/null ${LOG}
 
 RC=0
 
-sudo rsync -aHv --delete --one-file-system ${BOT} ${ONE} || RC=3
-sudo rsync -aHv --delete --one-file-system --exclude-from=${EXC} ${ROT} ${TWO} || RC=4
-sudo mv -i ${ERR} ${LOG} || RC=5
-cat ${LOG}
-echo exit ${RC}
+sudo rsync -aHv --delete --one-file-system                       ${BOT} ${ONE} | tee -a ${LOG} 1>&2 || RC=3
+sudo rsync -aHv --delete --one-file-system --exclude-from=${EXC} ${ROT} ${TWO} | tee -a ${LOG} 1>&2 || RC=4
 
+echo exit ${RC} 1>&2
 exit ${RC}
