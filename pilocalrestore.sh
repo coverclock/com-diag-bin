@@ -1,6 +1,6 @@
 #!/bin/bash
 # Copyright 2019 Digital Aggregates Corporation, Arvada CO USA.
-# usage: pilocalrestore.sh [ /mnt/pi/hostname [ /mntroot [ /mntboot ] ] ]
+# usage: pilocalrestore.sh [ /mnt/pi/hostname [ /mntboot [ /mntroot ] ] ]
 # Based on goldilocks via https://raspberrypi.stackexchange.com/questions/5427/can-a-raspberry-pi-be-used-to-create-a-backup-of-itself/28087#28087 .
 
 NAM=$(basename $0 .sh)
