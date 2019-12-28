@@ -1,6 +1,6 @@
 #!/bin/bash
 # Copyright 2019 Digital Aggregates Corporation, Arvada CO USA.
-# usage: backuppilocal.sh [ /mnt/pi/hostname ]
+# usage: pilocalbackup.sh [ /mnt/pi/hostname ]
 # Based on goldilocks via https://raspberrypi.stackexchange.com/questions/5427/can-a-raspberry-pi-be-used-to-create-a-backup-of-itself/28087#28087 .
 
 NAM=$(basename $0 .sh)
@@ -14,11 +14,11 @@ BOT="/boot"
 EXC="${BAK}/${NAM}-${TIM}.exc"
 LOG="${BAK}/${NAM}-${TIM}.log"
 
+mkdir -p ${ONE} || exit 1
+mkdir -p ${TWO} || exit 1
+
 test -d ${ROT} || exit 2
 test -d ${BOT} || exit 2
-
-mkdir -p ${ONE} || exit 2
-mkdir -p ${TWO} || exit 2
 
 cat << EOF > ${EXC}
 /boot/*

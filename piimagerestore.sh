@@ -1,6 +1,6 @@
 #!/bin/bash
 # Copyright 2019 Digital Aggregates Corporation, Arvada CO USA.
-# usage: restorepiimage.sh /mnt/framistat.gz /dev/sdc 4M
+# usage: piimagerestore.sh /mnt/framistat.gz /dev/sdc 4M
 # N.B. If it works at all, it will only do so with the same SD card
 # or perhaps one of the exact same size, brand, and model.
 ZIP=${1:-"/dev/null"}

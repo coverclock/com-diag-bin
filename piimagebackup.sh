@@ -1,6 +1,6 @@
 #!/bin/bash
 # Copyright 2019 Digital Aggregates Corporation, Arvada CO USA.
-# usage: backuppiimage.sh /dev/sdc /mnt/framistat.gz 4M
+# usage: piimagebackup.sh /dev/sdc /mnt/framistat.gz 4M
 # N.B. If it works at all, it will only do so with the same SD card
 # or perhaps one of the exact same size, brand, and model.
 DEV=${1:-"/dev/null"}

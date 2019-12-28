@@ -1,6 +1,6 @@
 #!/bin/bash
 # Copyright 2018 Digital Aggregates Corporation, Arvada CO USA.
-# usage: extractpiimage.sh /dev/sdc ./framistat.bin 1M
+# usage: piimageextract.sh /dev/sdc ./framistat.bin 1M
 DEV=${1:-"/dev/null"}
 IMG=${2:-"/dev/null"}
 BLK=${3:-"4M"}
