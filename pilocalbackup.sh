@@ -1,7 +1,10 @@
 #!/bin/bash
 # Copyright 2019 Digital Aggregates Corporation, Arvada CO USA.
 # usage: pilocalbackup.sh [ /mnt/pi/hostname ]
-# Based on goldilocks via https://raspberrypi.stackexchange.com/questions/5427/can-a-raspberry-pi-be-used-to-create-a-backup-of-itself/28087#28087 .
+
+# Based on 
+# https://raspberrypi.stackexchange.com/questions/5427/can-a-raspberry-pi-be-used-to-create-a-backup-of-itself/28087#28087 .
+# by user goldilocks.
 
 NAM=$(basename $0 .sh)
 SYS=$(hostname)
@@ -35,8 +38,8 @@ cp /dev/null ${LOG}
 
 RC=0
 
-sudo rsync -aHv --delete --one-file-system                       ${BOT} ${ONE} | tee -a ${LOG} 1>&2 || RC=3
-sudo rsync -aHv --delete --one-file-system --exclude-from=${EXC} ${ROT} ${TWO} | tee -a ${LOG} 1>&2 || RC=4
+sudo rsync -axHv --delete                       ${BOT} ${ONE} | tee -a ${LOG} 1>&2 || RC=3
+sudo rsync -axHv --delete --exclude-from=${EXC} ${ROT} ${TWO} | tee -a ${LOG} 1>&2 || RC=4
 
 echo exit ${RC} 1>&2
 exit ${RC}
