@@ -24,5 +24,14 @@ sudo rsync -av --delete-during ${ONE} ${BOT} 1>&2 || RC=3
 
 sudo rsync -av --delete-during ${TWO} ${ROT} 1>&2 || RC=4
 
+# THis can take a long time, like tens of minutes. You
+# can either take this flash write latency here, or when
+# you unmount the root file system (the boot file system
+# writes relatively quickly). I chose to embed it in
+# the script, rather than leave the surprise for later.
+sync
+sync
+sync
+
 echo exit ${RC} 1>&2
 exit ${RC}
