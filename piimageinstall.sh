@@ -1,6 +1,7 @@
 #!/bin/bash
-# Copyright 2018 Digital Aggregates Corporation, Arvada CO USA.
-# usage: piimageinstall.sh rpi3.img /dev/sdb 1M
+# Copyright 2018-2019 Digital Aggregates Corporation, Arvada CO USA.
+# USAGE piimageinstall.sh IMGFILE DEVICE [ BLOCKSIZE ]
+# EXAMPLE piimageinstall.sh rpi3.img /dev/sdb
 IMG=${1:-"/dev/null"}
 DEV=${2:-"/dev/null"}
 BLK=${3:-"4M"}

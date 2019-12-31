@@ -1,10 +1,10 @@
 #!/bin/bash
 # Copyright 2019 Digital Aggregates Corporation, Arvada CO USA.
-# usage: piimageformat.sh /dev/sdc
-
-# Based on 
+# USAGE piimageformat.sh DEVICE [ RELEASE | PART1ENDSECTOR PART2BEGINSECTOR ]
+# EXAMPLE piimageformat.sh /dev/sdc buster
+# REFERENCES
 # https://raspberrypi.stackexchange.com/questions/29947/reverse-the-expand-root-fs/29952#29952
-# by user goldilocks.
+# https://github.com/RPi-Distro/pi-gen/blob/master/export-noobs/00-release/files/partitions.json
 
 DEV=${1:-"/dev/null"}
 END=${2:-""}
@@ -60,8 +60,8 @@ ROT="${DEV}2"
 
 sudo fdisk -l ${DEV} || exit 3
 
-sudo mkfs.fat  -F32 ${BOT} || exit 4
+yes | sudo mkfs.fat  -F32          ${BOT} || exit 4
 
-sudo mkfs.ext4      ${ROT} || exit 4
+yes | sudo mkfs.ext4 -O ^huge_file ${ROT} || exit 4
 
 exit 0
