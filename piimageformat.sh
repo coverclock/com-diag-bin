@@ -60,8 +60,8 @@ ROT="${DEV}2"
 
 sudo fdisk -l ${DEV} || exit 3
 
-yes | sudo mkfs.fat  -F32          ${BOT} || exit 4
+yes | sudo mkfs.fat  -F32            ${BOT} || exit 4
 
-yes | sudo mkfs.ext4 -O ^huge_file ${ROT} || exit 4
+yes | sudo mkfs.ext4 -O '^huge_file' ${ROT} || exit 4
 
 exit 0
