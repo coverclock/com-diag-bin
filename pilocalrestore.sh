@@ -20,9 +20,9 @@ test -d ${TWO} || exit 2
 
 RC=0
 
-sudo rsync -av --delete-during ${ONE} ${BOT} 1>&2 || RC=3
+sudo rsync -aHv ${ONE} ${BOT} 1>&2 || RC=3
 
-sudo rsync -av --delete-during ${TWO} ${ROT} 1>&2 || RC=4
+sudo rsync -aHv ${TWO} ${ROT} 1>&2 || RC=4
 
 # THis can take a long time, like tens of minutes. You
 # can either take this flash write latency here, or when

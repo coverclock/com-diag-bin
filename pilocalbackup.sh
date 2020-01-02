@@ -32,7 +32,23 @@ cat << EOF > ${EXC}
 /run/*
 /sys/*
 /tmp/*
+/var/swap
 EOF
+
+INC=""
+INC="${INC} /dev/fd"
+INC="${INC} /dev/full"
+INC="${INC} /dev/null"
+INC="${INC} /dev/ptmx"
+INC="${INC} /dev/pts"
+INC="${INC} /dev/random"
+INC="${INC} /dev/shm"
+INC="${INC} /dev/stderr"
+INC="${INC} /dev/stdin"
+INC="${INC} /dev/stdout"
+INC="${INC} /dev/tty"
+INC="${INC} /dev/urandom"
+INC="${INC} /dev/zero"
 
 cp /dev/null ${LOG}
 
@@ -40,6 +56,7 @@ RC=0
 
 sudo rsync -axHv --delete-during                       ${BOT} ${ONE} | tee -a ${LOG} 1>&2 || RC=3
 sudo rsync -axHv --delete-during --exclude-from=${EXC} ${ROT} ${TWO} | tee -a ${LOG} 1>&2 || RC=4
+sudo rsync -axHv                                       ${INC} ${TWO} | tee -a ${LOG} 1>&2 || RC=5
 
 echo exit ${RC} 1>&2
 exit ${RC}
