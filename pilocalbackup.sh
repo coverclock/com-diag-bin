@@ -54,9 +54,9 @@ cp /dev/null ${LOG}
 
 RC=0
 
-sudo rsync -axHv --delete-during                       ${BOT} ${ONE} | tee -a ${LOG} 1>&2 || RC=3
-sudo rsync -axHv --delete-during --exclude-from=${EXC} ${ROT} ${TWO} | tee -a ${LOG} 1>&2 || RC=4
-sudo rsync -axHv                                       ${INC} ${TWO} | tee -a ${LOG} 1>&2 || RC=5
+sudo rsync -axHv --delete-during                       ${BOT} ${ONE}     | tee -a ${LOG} 1>&2 || RC=3
+sudo rsync -axHv --delete-during --exclude-from=${EXC} ${ROT} ${TWO}     | tee -a ${LOG} 1>&2 || RC=4
+sudo rsync -axHv                                       ${INC} ${TWO}/dev | tee -a ${LOG} 1>&2 || RC=5
 
 echo exit ${RC} 1>&2
 exit ${RC}
