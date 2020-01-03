@@ -63,7 +63,11 @@ sudo fdisk -l ${DEV} || exit 3
 yes | sudo mkfs.fat  -F32            ${BOT} || exit 4
 yes | sudo mkfs.ext4 -O '^huge_file' ${ROT} || exit 4
 
-sudo fsck.fat     ${BOT} || exit 5
-sudo fsck.ext4 -f ${ROT} || exit 5
+sudo fsck.fat  -y    ${BOT} || exit 5
+sudo fsck.ext4 -y -f ${ROT} || exit 5
+
+sync
+sync
+sync
 
 exit 0
