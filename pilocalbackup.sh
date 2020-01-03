@@ -12,6 +12,7 @@ BAK=${1:-"/mnt/pi/${SYS}"}
 TIM=$(date -u +%Y%m%dT%H%M%SZ)
 ONE="${BAK}/"
 TWO="${BAK}/root/"
+DEV="${TWO}/dev"
 ROT="/"
 BOT="/boot"
 EXC="${BAK}/${NAM}-${TIM}.exc"
@@ -32,7 +33,6 @@ cat << EOF > ${EXC}
 /run/*
 /sys/*
 /tmp/*
-/var/swap
 EOF
 
 INC=""
@@ -50,13 +50,17 @@ INC="${INC} /dev/tty"
 INC="${INC} /dev/urandom"
 INC="${INC} /dev/zero"
 
-cp /dev/null ${LOG}
-
 RC=0
 
-sudo rsync -axHv --delete-during                       ${BOT} ${ONE}     | tee -a ${LOG} 1>&2 || RC=3
-sudo rsync -axHv --delete-during --exclude-from=${EXC} ${ROT} ${TWO}     | tee -a ${LOG} 1>&2 || RC=4
-sudo rsync -axHv                                       ${INC} ${TWO}/dev | tee -a ${LOG} 1>&2 || RC=5
+cp /dev/null ${LOG}
+exec 2>>${LOG}
+tail -f ${LOG} &
+SAV=$!
+trap "kill ${SAV}" HUP INT TERM EXIT
+
+sudo rsync -axHv --delete-during                       ${BOT} ${ONE} 1>&2 || RC=3
+sudo rsync -axHv --delete-during --exclude-from=${EXC} ${ROT} ${TWO} 1>&2 || RC=4
+sudo rsync -axHv                                       ${INC} ${DEV} 1>&2 || RC=5
 
 # THis can take a long time, like tens of minutes. You
 # can either take this flash write latency here, or when
