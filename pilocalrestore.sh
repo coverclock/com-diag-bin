@@ -26,6 +26,7 @@ sudo rsync -aHv ${TWO} ${ROT} 1>&2 || RC=4
 echo "N.B. ${EDITOR:-"edit"} ${BOT}/cmdline.txt to change boot partition." 1>&2
 echo "N.B. ${EDITOR:-"edit"} ${ROT}/etc/dhcpcd.conf to change static IP address." 1>&2
 echo "N.B. ${EDITOR:-"edit"} ${ROT}/etc/hostname to change host name." 1>&2
+echo "N.B. ${EDITOR:-"edit"} ${ROT}/etc/hosts to change host name resolution." 1>&2
 echo "N.B. Perform a file system check!" 1>&2
 
 # THis can take a long time, like tens of minutes. You
