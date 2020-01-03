@@ -55,7 +55,10 @@ ROT="${DEV}2"
 ) | sudo fdisk ${DEV} || exit 2
 
 sudo fdisk -l ${DEV} || exit 3
+
+sudo fsck.fat  ${BOT} || exit 4
 sudo e2fsck -f ${ROT} || exit 4
+
 sudo resize2fs ${ROT} || exit 5
 
 exit 0
