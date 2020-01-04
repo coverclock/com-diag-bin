@@ -23,11 +23,13 @@ RC=0
 sudo rsync -aHv ${ONE} ${BOT} 1>&2 || RC=3
 sudo rsync -aHv ${TWO} ${ROT} 1>&2 || RC=4
 
-echo "N.B. ${EDITOR:-"edit"} ${BOT}/cmdline.txt to change boot partition." 1>&2
-echo "N.B. ${EDITOR:-"edit"} ${ROT}/etc/dhcpcd.conf to change static IP address." 1>&2
-echo "N.B. ${EDITOR:-"edit"} ${ROT}/etc/hostname to change host name." 1>&2
-echo "N.B. ${EDITOR:-"edit"} ${ROT}/etc/hosts to change host name resolution." 1>&2
-echo "N.B. Perform a file system check!" 1>&2
+echo "N.B. Optional steps:" 1>&2
+echo "[1] sudo ${EDITOR:-edit} ${BOT}/cmdline.txt to change boot partition." 1>&2
+echo "[2] sudo ${EDITOR:-edit} ${ROT}/etc/fstab to change / and /boot mounts." 1>&2
+echo "[3] sudo ${EDITOR:-edit} ${ROT}/etc/dhcpcd.conf to change static IP address." 1>&2
+echo "[4] sudo ${EDITOR:-edit} ${ROT}/etc/hostname to change host name." 1>&2
+echo "[5] sudo ${EDITOR:-edit} ${ROT}/etc/hosts to change host name resolution." 1>&2
+echo "[6] Perform a file system check!" 1>&2
 
 # THis can take a long time, like tens of minutes. You
 # can either take this flash write latency here, or when

@@ -20,6 +20,9 @@ sudo fdisk -l ${DEV} || exit 2
 sudo fsck.fat  -y    ${BOT} || exit 3
 sudo fsck.ext4 -y -f ${ROT} || exit 3
 
+sudo blkid ${BOT} || exit 4
+sudo blkid ${ROT} || exit 4
+
 sync
 sync
 sync
