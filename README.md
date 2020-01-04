@@ -20,3 +20,31 @@ NOTES
 The scripts to manage boot media, including backups and restores, for
 Raspberry Pi single board computers have not been extensively tested.
 
+EXAMPLES
+
+    piimageextract /dev/sdb ./framistat.img
+
+    piimageinstall ./framistat.img /dev/sdb
+    piimageexpand /dev/sdb buster
+    piimagecheck /dev/sdb
+
+    mount /dev/sdc1 /mnt
+    pilocalbackup
+    umount /mnt
+
+    piimageformat /dev/sdb buster
+    mount /dev/sdb1 /mnt1
+    mount /dev/sdb2 /mnt2
+    mount /dev/sdc /mnt
+    pilocalrestore /mnt/pi/framistat /mnt1 /mnt2
+    unmount /mnt /mnt1 /mnt2
+    piimagecheck /dev/sdb
+    piimageformat /dev/sdb buster
+
+    piimagecheck /dev/sdb
+    piimagebackup /dev/sdb ./framistat.gz
+
+    piimagerestore ./framistat.gz /dev/sdb
+    piimageexpand /dev/sdb buster
+    piimagecheck /dev/sdb
+
