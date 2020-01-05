@@ -57,6 +57,7 @@ Raspberry Pi single board computers have not been extensively tested.
     unmount /mnt /mnt1 /mnt2
     piimagecheck /dev/sdb
     piimageexpand /dev/sdb buster
+    piimagecheck /dev/sdb
 
 ## Backup a complete image.
 
@@ -66,6 +67,7 @@ Raspberry Pi single board computers have not been extensively tested.
 ## Restore a complete image to an identical or larger SD card.
 
     piimagerestore ./framistat.gz /dev/sdb
+    piimagecheck /dev/sdb
     piimageexpand /dev/sdb buster
     piimagecheck /dev/sdb
 
