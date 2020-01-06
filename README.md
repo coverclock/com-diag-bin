@@ -25,10 +25,6 @@ mailto:coverclock@diag.com
 
 # Examples of Managing Raspberry Pi (RPi) Boot Media
 
-The scripts to manage boot media, including backups and restores, for
-the Raspberry Pi single board computer are still being tested, being a
-recent addition.
-
 All of the scripts have names starting with "pi". Those that start with
 "piimage" deal with binary disk images and/or unmounted storage devices.
 Those that start with "pilocal" deal with mounted file systems. The
