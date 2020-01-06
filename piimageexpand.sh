@@ -32,6 +32,11 @@ test -n "${BEG}" || exit 1
 BOT="${DEV}1"
 ROT="${DEV}2"
 
+sudo fdisk -l ${DEV} || exit 2
+
+sudo fsck.fat  -y    ${BOT} || exit 3
+sudo fsck.ext4 -y -f ${ROT} || exit 3
+
 # The sleep is necessary because (I think) the kernel driver
 # makes the device busy for a moment once we change the
 # partitioning (even though we haven't written yet), so the
@@ -50,25 +55,33 @@ ROT="${DEV}2"
 	echo '2'
 	echo "${BEG}"
 	echo ''
+	echo 't'
+	echo '1'
+	echo 'c'
+	echo 't'
+	echo '2'
+	echo '83'
 	echo 'p'
 	sleep 5
 	echo 'w'
-) | sudo fdisk ${DEV} || exit 2
+) | sudo fdisk ${DEV} || exit 4
 
-sudo fdisk -l ${DEV} || exit 3
+sudo fdisk -l ${DEV} || exit 5
 
-sudo fsck.fat  -y    ${BOT} || exit 4
-sudo fsck.ext4 -y -f ${ROT} || exit 4
+sudo fsck.fat  -y    ${BOT} || exit 6
+sudo fsck.ext4 -y -f ${ROT} || exit 6
 
-sudo blkid ${BOT} || exit 5
-sudo blkid ${ROT} || exit 5
+sudo blkid ${BOT} || exit 7
+sudo blkid ${ROT} || exit 7
 
-sudo resize2fs ${ROT} || exit 6
+sudo resize2fs ${ROT} || exit 8
 
-sudo fsck.ext4 -y -f ${ROT} || exit 7
+sudo fsck.fat  -y    ${BOT} || exit 9
+sudo fsck.ext4 -y -f ${ROT} || exit 9
 
 sync
 sync
 sync
 
+echo "Success!" 1>&2
 exit 0

@@ -5,7 +5,7 @@
 ZIP=${1:-"/dev/null"}
 DEV=${2:-"/dev/null"}
 BLK=${3:-"4M"}
-CMD="unzip ${ZIP} | sudo dd bs=${BLK} of=${DEV} conv=fsync"
+CMD="unzip -p ${ZIP} | sudo dd bs=${BLK} of=${DEV} conv=fsync"
 test -f ${ZIP} || exit 2
 test -b ${DEV} || exit 2
 echo "${CMD}" 1>&2
