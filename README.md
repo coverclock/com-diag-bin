@@ -54,7 +54,7 @@ the same brand and model) or a larger size than the uSD card from which
 they were copied. And in either case, the piimageexpand script can be
 used to expand the root file system to use the remainder of the uSD card.
 
-## Determine the Raspbian version from an uSD card.
+## Determine the Raspbian version from a uSD card.
 
     mount /dev/sdx2 /mnt2
     cat /mnt2/etc/debian_version
