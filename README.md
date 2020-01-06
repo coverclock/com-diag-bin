@@ -49,6 +49,15 @@ and the scripts make use of the version code name: "jessie" for 8.x,
 two partition pattern found in the standard Raspbian image distributions,
 *not* the Noobs distributions which has more partitions.
 
+The Raspbian disk images from the RaspberryPi.org web site are compressed
+using zip, and that is the format used by the piimageinstall and
+piimageextract scripts. The piimagebackup and piimagerestore scripts use
+gzip compression instead. In either case, these tools are only useful if
+you load the image onto a uSD card that is the same size (and, typically,
+the same brand and model) or a larger size than the uSD card from which
+they were copied. And in either case, the piimageexpand script can be
+used to expand the root file system to use the remainder of the uSD card.
+
 ## Determine the Raspbian version from an uSD card.
 
     mount /dev/sdx2 /mnt2
