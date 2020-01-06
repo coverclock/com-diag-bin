@@ -28,7 +28,7 @@ mailto:coverclock@diag.com
 All of the scripts have names starting with "pi". Those that start with
 "piimage" deal with binary disk images and/or unmounted storage devices.
 Those that start with "pilocal" deal with mounted file systems. The
-pilocalbackup.sh script is intended to be run on the Raspberry Pi that
+pilocalbackup script is intended to be run on the Raspberry Pi that
 you are backing up; the other scripts can be run on a RPi or another
 host.
 
