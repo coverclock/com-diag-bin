@@ -27,17 +27,20 @@ mailto:coverclock@diag.com
 
 All of the scripts have names starting with "pi". Those that start with
 "piimage" deal with binary disk images and/or unmounted storage devices.
-Those that start with "pilocal" deal with mounted file systems. The
-pilocalbackup script is intended to be run on the Raspberry Pi that
-you are backing up; the other scripts can be run on a RPi or another
-host.
+Those that start with "pilocal" deal with mounted file systems. I run
+the pilocalbackup script on the Raspberry Pi that I am backing up;
+the other scripts can be run on a RPi or another host.
 
 In the examples below, /dev/sdx is a micro-SD (uSD) card for a Raspberry
 PI on which /dev/sdx1 (partition one) is the boot partition and /dev/sdx2
 (partition two) is the root partition, and /dev/sdy is the backup
 media (e.g. an SSD) with a (for example) ext4 file system on /dev/sdy1
-(partition one). "framistat" is a stand-in for a RPi host name. "doodad" is
-a stand-in for a Raspbian distribution like "buster".
+(partition one). It is only by my own personal convention that I
+mount the boot (/boot) and root (/) file systems on the mount points
+/mnt1 and /mnt2 respectively, and the backup up SSD on /mnt.
+
+"framistat" is a stand-in for a RPi host name. "doodad" is a stand-in
+for a Raspbian distribution like "buster".
 
 The partitioning of the uSD card depends on the Raspbian verion,
 and the scripts make use of the version code name: "jessie" for 8.x,
