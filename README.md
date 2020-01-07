@@ -25,6 +25,14 @@ mailto:coverclock@diag.com
 
 # Examples of Managing Raspberry Pi (RPi) Boot Media
 
+At last count I have ten Raspberry Pi single board computers of various
+vintages and configurations running 24x7 around the Palatial Overclock
+Estate, not to mention some others tucked away in the basement that I
+only break out occasionally. Their functions range from stuff like an
+Apache web server to a cesium atomic clock. I developed a modest
+collection of simple shell scripts to help me deal with their boot
+media.
+
 All of the scripts have names starting with "pi". Those that start with
 "piimage" deal with binary disk images and/or unmounted storage devices.
 Those that start with "pilocal" deal with mounted file systems. I run
