@@ -129,3 +129,9 @@ shown below.
     ${EDITOR:-"vi"} /mnt2/etc/hostname    # To change host name.
     ${EDITOR:-"vi"} /mnt2/etc/hosts       # To change host name resolution.
     umount /mnt2
+
+## Acknowledgements
+
+<https://raspberrypi.stackexchange.com/questions/29947/reverse-the-expand-root-fs/29952#29952>
+
+<https://github.com/RPi-Distro/pi-gen/blob/master/export-noobs/00-release/files/partitions.json>
