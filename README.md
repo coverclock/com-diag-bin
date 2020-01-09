@@ -35,9 +35,11 @@ media.
 
 All of the scripts have names starting with "pi". Those that start with
 "piimage" deal with binary disk images and/or unmounted storage devices.
-Those that start with "pilocal" deal with mounted file systems. I run
-the pilocalbackup script on the Raspberry Pi that I am backing up;
-the other scripts can be run on a RPi or another host.
+Those that start with "pilocal" deal with individual files and mounted
+file systems. I run the pilocalbackup script on the Raspberry Pi that
+I am backing up; the other scripts can be run on a RPi or another host
+accessing the boot media through, for example, a card adapter with a
+USB interface.
 
 In the examples below, /dev/sdx is a micro-SD (uSD) card for a Raspberry
 PI on which /dev/sdx1 (partition one) is the boot partition and /dev/sdx2
@@ -65,6 +67,10 @@ the same brand and model) or a larger size than the uSD card from which
 they were copied. And in either case, the piimageexpand script can be
 used to expand the root file system to use the remainder of the uSD card.
 
+I typically softlink to the scripts in the cloned repo into my local bin
+directory and rename the links to drop the ".sh" suffix; that's what is
+shown below.
+
 ## Determine the Raspbian version from a uSD card.
 
     mount /dev/sdx2 /mnt2
@@ -86,10 +92,20 @@ used to expand the root file system to use the remainder of the uSD card.
 
     piimageextract /dev/sdx ./framistat.zip
 
+## Backup a complete RPi image to a gzipped file.
+
+    piimagecheck /dev/sdx
+    piimagebackup /dev/sdx ./framistat.gz
+
+## Restore a gzipped RPi image to an identical or larger uSD card.
+
+    piimagerestore ./framistat.gz /dev/sdx
+    piimageexpand /dev/sdx buster
+
 ## Backup files using rsync run locally on an RPi.
 
     mount /dev/sdy1 /mnt
-    pilocalbackup
+    pilocalbackup /mnt/pi/framistat
     umount /mnt
 
 ## Restore RPi files using rsync to an unused uSD card.
@@ -100,16 +116,6 @@ used to expand the root file system to use the remainder of the uSD card.
     mount /dev/sdy1 /mnt
     pilocalrestore /mnt/pi/framistat /mnt1 /mnt2
     unmount /mnt /mnt1 /mnt2
-
-## Backup a complete RPi image to a gzipped file.
-
-    piimagecheck /dev/sdx
-    piimagebackup /dev/sdx ./framistat.gz
-
-## Restore a gzipped RPi image to an identical or larger uSD card.
-
-    piimagerestore ./framistat.gz /dev/sdx
-    piimageexpand /dev/sdx buster
 
 ## Customize the RPi image on a restored uSD card.
 
