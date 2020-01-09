@@ -17,14 +17,19 @@ mount | grep "${ROT}" && exit 1
 
 sudo fdisk -l ${DEV} || exit 2
 
-sudo fsck.fat  -y    ${BOT} || exit 3
+sudo fsck.vfat -y    ${BOT} || exit 3
 sudo fsck.ext4 -y -f ${ROT} || exit 3
 
-sudo blkid ${BOT} || exit 4
-sudo blkid ${ROT} || exit 4
+sudo fatlabel ${BOT} || exit 4
+
+sudo dumpe2fs  ${ROT} || exit 5
+
+sudo blkid ${BOT} || exit 6
+sudo blkid ${ROT} || exit 6
 
 sync
 sync
 sync
 
+echo "Success!" 1>&2
 exit 0
