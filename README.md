@@ -132,6 +132,8 @@ shown below.
 
 ## Acknowledgements
 
+<https://raspberrypi.stackexchange.com/questions/5427/can-a-raspberry-pi-be-used-to-create-a-backup-of-itself/28087#28087>
+
 <https://raspberrypi.stackexchange.com/questions/29947/reverse-the-expand-root-fs/29952#29952>
 
 <https://github.com/RPi-Distro/pi-gen/blob/master/export-noobs/00-release/files/partitions.json>
