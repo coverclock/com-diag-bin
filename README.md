@@ -73,11 +73,15 @@ shown below.
 
 ## Determine the Raspbian version from a uSD card.
 
+The partitioning on the standard Raspbian image differs from jessie to stretch to buster.
+
     mount /dev/sdx2 /mnt2
     cat /mnt2/etc/debian_version
     umount /mnt2
 
 ## Determine the Raspbian version from the local backup.
+
+The partitioning on the standard Raspbian image differs from jessie to stretch to buster.
 
     mount /dev/sdy1 /mnt
     cat /mnt/pi/framistat/etc/debian_version
@@ -100,15 +104,19 @@ shown below.
 ## Restore a gzipped RPi image to an identical or larger uSD card.
 
     piimagerestore ./framistat.gz /dev/sdx
-    piimageexpand /dev/sdx buster
+    piimageexpand /dev/sdx doodad
 
 ## Backup files using rsync run locally on an RPi.
+
+I install and run this script locally on the Raspberry Pi itself after mounting the backup media (in my case, a one terabyte USB-attached SSD). The script uses the hostname of the Pi to create a directory on the backup media into which the files are saved. I am currently backing up about twelve different Raspberry Pis running three different versions of Raspbian this way.
 
     mount /dev/sdy1 /mnt
     pilocalbackup /mnt/pi/framistat
     umount /mnt
 
 ## Restore RPi files using rsync to an unused uSD card.
+
+I have successfully recreated the boot uSD card for a Raspberry Pi using this mechanism, run from another host (in my case,m an Intel server running Ubuntu).
 
     piimageformat /dev/sdx buster
     mount /dev/sdx1 /mnt1
@@ -118,6 +126,8 @@ shown below.
     unmount /mnt /mnt1 /mnt2
 
 ## Customize the RPi image on a restored uSD card.
+
+You might not need to customize the Raspberry Pi boot uSD card you restore. But in one case, the original backup was from a NOOBS-based uSD card which has seven partitions, and I created a uSD card with two partitions, boot and root. I also restored a uSD card and then customized it with a different host and IP address, so I could run the same software in parallel on another Raspberry Pi for testing purposes. This was all done on an Intel server running Ubuntu, before I ever tried to boot up the uSD card on the Pi.
 
     mount /dev/sdx1 /mnt1
     ${EDITOR:-"vi"} /mnt1/cmdline.txt     # To change boot partition.
