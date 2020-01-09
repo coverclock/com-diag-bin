@@ -1,7 +1,7 @@
 com-diag-bin
 ============
 
-Useful little Linux shell scripts.
+Raspberry Pi backup scripts and other useful Linux shell scripts.
 
 # Abstract
 
