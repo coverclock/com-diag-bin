@@ -121,7 +121,7 @@ I have successfully recreated the boot uSD card for a Raspberry Pi using this me
     piimageformat /dev/sdx buster
     sudo mount /dev/sdx1 /mnt1
     sudo mount /dev/sdx2 /mnt2
-    msudo ount /dev/sdy1 /mnt
+    sudo mount /dev/sdy1 /mnt
     pilocalrestore /mnt/pi/framistat /mnt1 /mnt2
     sudo unmount /mnt /mnt1 /mnt2
 
