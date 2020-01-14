@@ -75,17 +75,17 @@ shown below.
 
 The partitioning on the standard Raspbian image differs from jessie to stretch to buster.
 
-    mount /dev/sdx2 /mnt2
+    sudo mount /dev/sdx2 /mnt2
     cat /mnt2/etc/debian_version
-    umount /mnt2
+    sudo umount /mnt2
 
 ## Determine the Raspbian version from the local backup.
 
 The partitioning on the standard Raspbian image differs from jessie to stretch to buster.
 
-    mount /dev/sdy1 /mnt
+    sudo mount /dev/sdy1 /mnt
     cat /mnt/pi/framistat/etc/debian_version
-    umount /mnt
+    sudo umount /mnt
 
 ## Install a zipped RPi image on an identical or larger uSD card.
 
@@ -110,35 +110,35 @@ The partitioning on the standard Raspbian image differs from jessie to stretch t
 
 I install and run this script locally on the Raspberry Pi itself after mounting the backup media (in my case, a one terabyte USB-attached SSD). The script uses the hostname of the Pi to create a directory on the backup media into which the files are saved. I am currently backing up about twelve different Raspberry Pis running three different versions of Raspbian this way.
 
-    mount /dev/sdy1 /mnt
+    sudo mount /dev/sdy1 /mnt
     pilocalbackup /mnt/pi/framistat
-    umount /mnt
+    sudo umount /mnt
 
 ## Restore RPi files using rsync to an unused uSD card.
 
 I have successfully recreated the boot uSD card for a Raspberry Pi using this mechanism, run from another host (in my case,m an Intel server running Ubuntu).
 
     piimageformat /dev/sdx buster
-    mount /dev/sdx1 /mnt1
-    mount /dev/sdx2 /mnt2
-    mount /dev/sdy1 /mnt
+    sudo mount /dev/sdx1 /mnt1
+    sudo mount /dev/sdx2 /mnt2
+    msudo ount /dev/sdy1 /mnt
     pilocalrestore /mnt/pi/framistat /mnt1 /mnt2
-    unmount /mnt /mnt1 /mnt2
+    sudo unmount /mnt /mnt1 /mnt2
 
 ## Customize the RPi image on a restored uSD card.
 
 You might not need to customize the Raspberry Pi boot uSD card you restore. But in one case, the original backup was from a NOOBS-based uSD card which has seven partitions, and I created a uSD card with two partitions, boot and root. I also restored a uSD card and then customized it with a different host and IP address, so I could run the same software in parallel on another Raspberry Pi for testing purposes. This was all done on an Intel server running Ubuntu, before I ever tried to boot up the uSD card on the Pi.
 
-    mount /dev/sdx1 /mnt1
-    ${EDITOR:-"vi"} /mnt1/cmdline.txt     # To change boot partition.
-    umount /mnt1
+    sudo mount /dev/sdx1 /mnt1
+    sudo ${EDITOR:-"vi"} /mnt1/cmdline.txt     # To change boot partition.
+    sudo umount /mnt1
     
-    mount /dev/sdx2 /mnt2
-    ${EDITOR:-"vi"} /mnt2/etc/fstab       # To change / and /boot mounts.
-    ${EDITOR:-"vi"} /mnt2/etc/dhcpcd.conf # To change IP address.
-    ${EDITOR:-"vi"} /mnt2/etc/hostname    # To change host name.
-    ${EDITOR:-"vi"} /mnt2/etc/hosts       # To change host name resolution.
-    umount /mnt2
+    sudo mount /dev/sdx2 /mnt2
+    sudo ${EDITOR:-"vi"} /mnt2/etc/fstab       # To change / and /boot mounts.
+    sudo ${EDITOR:-"vi"} /mnt2/etc/dhcpcd.conf # To change IP address.
+    sudo ${EDITOR:-"vi"} /mnt2/etc/hostname    # To change host name.
+    sudo ${EDITOR:-"vi"} /mnt2/etc/hosts       # To change host name resolution.
+    sudo umount /mnt2
 
 ## Acknowledgements
 
