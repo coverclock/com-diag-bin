@@ -71,7 +71,11 @@ I typically softlink to the scripts in the cloned repo into my local bin
 directory and rename the links to drop the ".sh" suffix; that's what is
 shown below.
 
-## Determine the Raspbian version from a uSD card.
+"Offline" means I run the script on another Linux system, typically an Intel
+machine running Ubuntu, although it could be another Raspberry Pi running
+Raspbian. "Online" means I run the script on the Raspberry Pi itself.
+
+## Determine the Raspbian version from a uSD card offline.
 
 The partitioning on the standard Raspbian image differs from jessie to stretch to buster.
 
@@ -79,7 +83,7 @@ The partitioning on the standard Raspbian image differs from jessie to stretch t
     cat /mnt2/etc/debian_version
     sudo umount /mnt2
 
-## Determine the Raspbian version from the local backup.
+## Determine the Raspbian version from the local backup offline.
 
 The partitioning on the standard Raspbian image differs from jessie to stretch to buster.
 
@@ -87,26 +91,28 @@ The partitioning on the standard Raspbian image differs from jessie to stretch t
     cat /mnt/pi/framistat/etc/debian_version
     sudo umount /mnt
 
-## Install a zipped RPi image on an identical or larger uSD card.
+## Install a zipped RPi image on an identical or larger uSD card offline.
+
+This uses zip instead of gzip because that's the format that Raspbian disk images are distributed in by the Raspberry Pi organization.
 
     piimageinstall ./doodad.zip /dev/sdx
     piimageexpand /dev/sdx buster
 
-## Extract the complete RPi image from a uSD card to a zip file.
+## Extract the complete RPi image from a uSD card to a zip file offline.
 
     piimageextract /dev/sdx ./framistat.zip
 
-## Backup a complete RPi image to a gzipped file.
+## Backup a complete RPi image to a gzipped file offline.
 
     piimagecheck /dev/sdx
     piimagebackup /dev/sdx ./framistat.gz
 
-## Restore a gzipped RPi image to an identical or larger uSD card.
+## Restore a gzipped RPi image to an identical or larger uSD card offline.
 
     piimagerestore ./framistat.gz /dev/sdx
     piimageexpand /dev/sdx doodad
 
-## Backup files using rsync run locally on an RPi.
+## Backup files using rsync online.
 
 I install and run this script locally on the Raspberry Pi itself after mounting the backup media (in my case, a one terabyte USB-attached SSD). The script uses the hostname of the Pi to create a directory on the backup media into which the files are saved. I am currently backing up about twelve different Raspberry Pis running three different versions of Raspbian this way.
 
@@ -114,7 +120,7 @@ I install and run this script locally on the Raspberry Pi itself after mounting 
     pilocalbackup /mnt/pi/framistat
     sudo umount /mnt
 
-## Restore RPi files using rsync to an unused uSD card.
+## Restore RPi files using rsync to an unused uSD card offline.
 
 I have successfully recreated the boot uSD card for a Raspberry Pi using this mechanism, run from another host (in my case,m an Intel server running Ubuntu).
 
@@ -125,7 +131,7 @@ I have successfully recreated the boot uSD card for a Raspberry Pi using this me
     pilocalrestore /mnt/pi/framistat /mnt1 /mnt2
     sudo unmount /mnt /mnt1 /mnt2
 
-## Customize the RPi image on a restored uSD card.
+## Customize the RPi image on a restored uSD card offline.
 
 You might not need to customize the Raspberry Pi boot uSD card you restore. But in one case, the original backup was from a NOOBS-based uSD card which has seven partitions, and I created a uSD card with two partitions, boot and root. I also restored a uSD card and then customized it with a different host and IP address, so I could run the same software in parallel on another Raspberry Pi for testing purposes. This was all done on an Intel server running Ubuntu, before I ever tried to boot up the uSD card on the Pi.
 
