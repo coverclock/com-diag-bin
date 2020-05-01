@@ -9,7 +9,7 @@
 #
 
 USAGE="`basename $0` file [ directory ]"
-TS="`date -u +%Y%m%dT%H%M%S.%N%:z`"
+TS="`date -u +%Y%m%dT%H%M%SZ%N`"
 if [ 1 -le $# -a $# -le 2 ]; then
     if [ -f $1 ]; then
         if [ $# -eq 1 ]; then
