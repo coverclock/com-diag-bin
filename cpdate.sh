@@ -1,17 +1,12 @@
 #!/bin/bash
 # Copyright 2005-2014 by the Digital Aggregates Corporation, Colorado, USA.
 # Licensed under the GPLv2.
-#       
-#   cppdate.sh: make a timestamped backup copy of a file.
-#
-#   usage:  cpdate <filename>
-#   or      cpdate <filename> <directory>
-#
+# Make a timestamped backup copy of a file.
 
 USAGE="`basename $0` file [ directory ]"
 TS="`date -u +%Y%m%dT%H%M%SZ%N`"
 if [ 1 -le $# -a $# -le 2 ]; then
-    if [ -f $1 -o -d $1 ]; then
+    if [ -f $1 ]; then
         if [ $# -eq 1 ]; then
             TO="$1-$TS"
             exec cp -i $1 $TO && chmod u-wx,g-wx,o-wx $TO
