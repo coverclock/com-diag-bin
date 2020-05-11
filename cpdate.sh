@@ -11,16 +11,14 @@
 USAGE="`basename $0` file [ directory ]"
 TS="`date -u +%Y%m%dT%H%M%S.%N%:z`"
 if [ 1 -le $# -a $# -le 2 ]; then
-    if [ -f $1 ]; then
+    if [ -f $1 -o -d $1 ]; then
         if [ $# -eq 1 ]; then
             TO="$1-$TS"
-            cp -i $1 $TO && chmod u-wx,g-wx,o-wx $TO
-            exit $?
+            exec cp -i $1 $TO && chmod u-wx,g-wx,o-wx $TO
         elif [ -d $2 ]; then
             BN="`basename $1`"
             TO="$2/$BN-$TS"
-            cp -i $1 $TO && chmod u-wx,g-wx,o-wx $TO
-            exit $?
+            exec cp -i $1 $TO && chmod u-wx,g-wx,o-wx $TO
         fi
     fi
 fi
