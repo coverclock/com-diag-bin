@@ -5,6 +5,7 @@
 # REFERENCES
 # https://raspberrypi.stackexchange.com/questions/29947/reverse-the-expand-root-fs/29952#29952
 # https://github.com/RPi-Distro/pi-gen/blob/master/export-noobs/00-release/files/partitions.json
+# https://ubuntu.com/tutorials/how-to-install-ubuntu-on-your-raspberry-pi
 
 DEV=${1:-"/dev/null"}
 END=${2:-""}
@@ -19,6 +20,9 @@ elif [[ "${END}" == "stretch" ]]; then
 elif [[ "${END}" == "buster" ]]; then
 	END=532479
 	BEG=532480
+elif [[ "${END}" == "focal" ]]; then
+	END=526335
+	BEG=526336
 else
 	:
 fi
