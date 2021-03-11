@@ -40,9 +40,12 @@ if [ ! \( -f ${INF} -a -f ${POF} \) ]; then
 					-name '*.[a-z]mk' -o \
 					-name '*.cc' -o \
 					-name '*.cpp' -o \
+					-name '*.css' -o \
 					-name '*.cxx' -o \
 					-name '*.dts' -o \
 					-name '*.hpp' -o \
+					-name '*.html' -o \
+					-name '*.htm' -o \
 					-name '*.hx' -o \
 					-name '*.hxx' -o \
 					-name '*.inl' -o \

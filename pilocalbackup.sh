@@ -26,6 +26,7 @@ test -d ${BOT} || exit 2
 
 cat << EOF > ${EXC}
 /boot/*
+/data/*
 /dev/*
 /media/*
 /mnt/*
