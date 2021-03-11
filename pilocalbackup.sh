@@ -63,7 +63,7 @@ sudo rsync -axHv --delete-during                       ${BOT} ${ONE} 1>&2 || RC=
 sudo rsync -axHv --delete-during --exclude-from=${EXC} ${ROT} ${TWO} 1>&2 || RC=4
 sudo rsync -axHv                                       ${INC} ${DEV} 1>&2 || RC=5
 
-# THis can take a long time, like tens of minutes. You
+# This can take a long time, like tens of minutes. You
 # can either take this flash write latency here, or when
 # you unmount the backup device. I chose to embed it in
 # the script, rather than leave the surprise for later.
