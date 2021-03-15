@@ -196,7 +196,7 @@ clobber:	pristine
 	rm -f .cscope.lst .cscope.out .cscope.out.in .cscope.out.po
 
 prepare:
-	for D in $(APP_DIR) $(BIN_DIR) $(CFG_DIR) $(DAT_DIR) $(ETC_DIR) $(EXT_DIR) $(OLY_DIR) $(FUN_DIR) $(INC_DIR) $(SRC_DIR) $(TST_DIR) $(TXT_DIR); do \
+	for D in $(APP_DIR) $(BIN_DIR) $(DAT_DIR) $(ETC_DIR) $(EXT_DIR) $(OLY_DIR) $(FUN_DIR) $(INC_DIR) $(SRC_DIR) $(TST_DIR) $(TXT_DIR); do \
 		mkdir $$D; touch $$D/PLACEHOLDER.txt; \
 	done
 
