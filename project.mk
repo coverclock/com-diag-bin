@@ -20,9 +20,9 @@ default:	all
 
 TITLE				:=	XXXXXXXX
 
-MAJOR				:=	XX# API changes that may require that applications be modified.
-MINOR				:=	XX# Only functionality or features added with no legacy API changes.
-BUILD				:=	XX# Only bugs fixed with no API changes or new functionality.
+MAJOR				:=	0# API changes that may require that applications be modified.
+MINOR				:=	0# Only functionality or features added with no legacy API changes.
+BUILD				:=	0# Only bugs fixed with no API changes or new functionality.
 
 TARGET				:=	host# Build for the local host of the Makefile.
 
@@ -60,7 +60,7 @@ OUT_DIR				:=	out# Build artifacts
 ARC_DIR				:=	arc# Archive files for static linking
 DEP_DIR				:=	dep# Generated dependencies and other make files
 DOC_DIR				:=	doc# Documentation
-GEN_DIR				:=	gen# Generated source files
+GEN_DIR				:=	gen# Generated utility source files
 LIB_DIR				:=	lib# Shared objects for dynamic linking
 MOD_DIR				:=	mod# Loadable user modules
 OBC_DIR				:=	obc# C object modules
@@ -83,6 +83,7 @@ ROOT_DIR			:=	$(HOME_DIR)/$(TARGET)
 GITURL				:=	https://github.com/coverclock/com-diag-$(PROJECT).git
 
 GENERATED			:=	vintage generate setup
+PROVIDENCED			:=	$(PROJECT)_release.c $(PROJECT)_vintage.c $(PROJECT)_revision.c
 SYNTHESIZED			:=	$(PROJECT)_release.h $(PROJECT)_vintage.h $(PROJECT)_revision.h
 
 ALIASES				:=	
@@ -155,8 +156,8 @@ TARGETBINARIES		:=	$(addprefix $(OUT)/,$(basename $(wildcard $(BIN_DIR)/*.c)))
 TARGETFUNCTIONALS	:=	$(addprefix $(OUT)/,$(basename $(wildcard $(FUN_DIR)/*.c)))
 TARGETFUNCTIONALS	+=	$(addprefix $(OUT)/,$(basename $(wildcard $(FUN_DIR)/*.sh)))
 TARGETGENERATED		:=	$(addprefix $(OUT)/$(BIN_DIR)/,$(GENERATED)) $(addprefix $(OUT)/$(SYM_DIR)/,$(GENERATED))
-TARGETOBJECTS		:=	$(addprefix $(OUT)/$(OBC_DIR)/,$(addsuffix .o,$(basename $(wildcard $(SRC_DIR)/*.c))))
-TARGETSCRIPTS		:=	$(addprefix $(OUT)/,$(basename $(wildcard $(BIN_DIR)/*.sh)))
+TARGETOBJECTS		:=	$(addprefix $(OUT)/$(OBC_DIR)/,$(addsuffix .o,$(basename $(wildcard $(SRC_DIR)/*.c)))) $(addprefix $(OUT)/$(OBC_DIR)/$(SRC_DIR)/,$(addsuffix .o,$(basename $(PROVIDENCED))))
+ARGETSCRIPTS		:=	$(addprefix $(OUT)/,$(basename $(wildcard $(BIN_DIR)/*.sh)))
 TARGETSCRIPTS		+=	$(addprefix $(OUT)/,$(wildcard $(BIN_DIR)/*.awk))
 TARGETSYNTHESIZED	:=	$(addprefix $(OUT)/$(INC_DIR)/com/diag/$(PROJECT)/,$(SYNTHESIZED))
 TARGETUNITTESTS		:=	$(addprefix $(OUT)/,$(basename $(wildcard $(TST_DIR)/*.c)))
@@ -168,7 +169,7 @@ TARGETSHARED		+=	$(OUT)/$(LIB_DIR)/$(PROJECT_SO).$(MAJOR)
 TARGETSHARED		+=	$(OUT)/$(LIB_DIR)/$(PROJECT_SO)
 
 TARGETLIBRARIES		:=	$(TARGETARCHIVE) $(TARGETSHARED)
-TARGETPROGRAMS		:=	$(TARGETAPPLICATIONS) $(TARGETBINARIES) $(TARGETALIASES) $(TARGETUNITTESTS) $(TARGETFUNCTIONALS) $(TARGETGENERATED) $(TARGETSCRIPTS)
+TARGETPROGRAMS		:=	$(TARGETAPPLICATIONS) $(TARGETBINARIES) $(TARGETALIASES) $(TARGETUNITTESTS) $(TARGETFUNCTIONALS) $(TARGETTEMPLATES) $(TARGETGENERATED) $(TARGETSCRIPTS)
 TARGETALL			:=	$(TARGETLIBRARIES) $(TARGETPROGRAMS)
 
 ########## Main Entry Points
@@ -198,8 +199,8 @@ clobber:	pristine
 prepare:
 	mkdir -p $(CFG_DIR); touch $(CFG_DIR)/host.mk
 	mkdir -p $(APP_DIR)/PLACEHOLDER; touch $(APP_DIR)/PLACEHOLDER/PLACEHOLDER.txt
-	for D in $(APP_DIR) $(BIN_DIR) $(DAT_DIR) $(ETC_DIR) $(EXT_DIR) $(OLY_DIR) $(FUN_DIR) $(INC_DIR) $(SRC_DIR) $(TST_DIR) $(TXT_DIR); do \
-		mkdir $$D; touch $$D/PLACEHOLDER.txt; \
+	for D in $(BIN_DIR) $(CFG_DIR) $(DAT_DIR) $(ETC_DIR) $(EXT_DIR) $(OLY_DIR) $(FUN_DIR) $(INC_DIR) $(SRC_DIR) $(TST_DIR) $(TXT_DIR); do \
+		mkdir -p $$D; touch $$D/PLACEHOLDER.txt; \
 	done
 
 ########## Packaging and Distribution
@@ -277,7 +278,7 @@ $(OUT)/$(LIB_DIR)/lib$(PROJECT).$(SO):	$(OUT)/$(LIB_DIR)/lib$(PROJECT).$(SO).$(M
 
 $(OUT)/$(APP_DIR)/%:	$(APP_DIR)/% $(TARGETLIBRARIES)
 	D=`dirname $@`; mkdir -p $$D
-	$(CC) -iquote $< $(CPPFLAGS) $(CFLAGS) -o $@ $</*.c $(LDFLAGS)
+	test -r $</main.c && $(CC) -iquote $< $(CPPFLAGS) $(CFLAGS) -o $@ $</*.c $(LDFLAGS) || true
 
 ########## Target Unstripped Binaries
 
@@ -312,9 +313,9 @@ SLASHES=2
 
 ifeq ($(SLASHES), 1)
 
-$(OUT)/$(GEN_DIR)/vintage.c:	Makefile
-	@echo MAKE_VERSION=$(MAKE_VERSION) SLASHES=$(SLASHES)
+$(OUT)/$(GEN_DIR)/vintage.c:	Makefile $(OUT)/$(INC_DIR)/com/diag/$(PROJECT)/$(PROJECT)_release.h $(OUT)/$(INC_DIR)/com/diag/$(PROJECT)/$(PROJECT)_revision.h $(OUT)/$(INC_DIR)/com/diag/$(PROJECT)/$(PROJECT)_vintage.h
 	D=`dirname $@`; mkdir -p $$D
+	@echo MAKE_VERSION=$(MAKE_VERSION) SLASHES=$(SLASHES)
 	echo '/* GENERATED FILE! DO NOT EDIT! */' > $@
 	echo '#include "com/diag/$(PROJECT)/$(PROJECT)_release.h"' >> $@
 	echo '#include "com/diag/$(PROJECT)/$(PROJECT)_release.h"' >> $@
@@ -379,7 +380,8 @@ endif
 
 ifeq ($(SLASHES), 2)
 
-$(OUT)/$(GEN_DIR)/vintage.c:	Makefile
+$(OUT)/$(GEN_DIR)/vintage.c:	Makefile $(OUT)/$(INC_DIR)/com/diag/$(PROJECT)/$(PROJECT)_release.h $(OUT)/$(INC_DIR)/com/diag/$(PROJECT)/$(PROJECT)_revision.h $(OUT)/$(INC_DIR)/com/diag/$(PROJECT)/$(PROJECT)_vintage.h
+	D=`dirname $@`; mkdir -p $$D
 	@echo MAKE_VERSION=$(MAKE_VERSION) SLASHES=$(SLASHES)
 	D=`dirname $@`; mkdir -p $$D
 	echo '/* GENERATED FILE! DO NOT EDIT! */' > $@
@@ -444,6 +446,17 @@ $(OUT)/$(GEN_DIR)/vintage.c:	Makefile
 
 endif
 
+$(OUT)/$(OBC_DIR)/$(SRC_DIR)/$(PROJECT)_release.o:	$(OUT)/$(SRC_DIR)/$(PROJECT)_release.c
+	D=`dirname $@`; mkdir -p $$D
+	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ -c $<
+
+$(OUT)/$(SRC_DIR)/$(PROJECT)_release.c:	Makefile $(OUT)/$(INC_DIR)/com/diag/$(PROJECT)/$(PROJECT)_release.h
+	D=`dirname $@`; mkdir -p $$D
+	echo '/* GENERATED FILE! DO NOT EDIT! */' > $@
+	echo '#include "com/diag/$(PROJECT)/$(PROJECT)_release.h"' >> $@
+	echo 'const char COM_DIAG_$(SYMBOL)_RELEASE_KEYWORD[] = "COM_DIAG_$(SYMBOL)_RELEASE=" COM_DIAG_$(SYMBOL)_RELEASE;' >> $@
+	echo 'const char * COM_DIAG_$(SYMBOL)_RELEASE_VALUE = &COM_DIAG_$(SYMBOL)_RELEASE_KEYWORD[sizeof("COM_DIAG_$(SYMBOL)_RELEASE=") - 1];' >> $@
+
 $(OUT)/$(INC_DIR)/com/diag/$(PROJECT)/$(PROJECT)_release.h:	Makefile
 	D=`dirname $@`; mkdir -p $$D
 	echo '/* GENERATED FILE! DO NOT EDIT! */' > $@
@@ -455,17 +468,16 @@ $(OUT)/$(INC_DIR)/com/diag/$(PROJECT)/$(PROJECT)_release.h:	Makefile
 	echo '#define COM_DIAG_$(SYMBOL)_RELEASE "$(MAJOR).$(MINOR).$(BUILD)"' >> $@
 	echo '#endif' >> $@
 
-$(OUT)/$(OBC_DIR)/$(SRC_DIR)/$(PROJECT)_release.o:	$(OUT)/$(INC_DIR)/com/diag/$(PROJECT)/$(PROJECT)_release.h
+$(OUT)/$(OBC_DIR)/$(SRC_DIR)/$(PROJECT)_revision.o:	$(OUT)/$(SRC_DIR)/$(PROJECT)_revision.c
+	D=`dirname $@`; mkdir -p $$D
+	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ -c $<
 
-$(OUT)/$(INC_DIR)/com/diag/$(PROJECT)/$(PROJECT)_vintage.h:	Makefile
+$(OUT)/$(SRC_DIR)/$(PROJECT)_revision.c:	Makefile $(OUT)/$(INC_DIR)/com/diag/$(PROJECT)/$(PROJECT)_revision.h
 	D=`dirname $@`; mkdir -p $$D
 	echo '/* GENERATED FILE! DO NOT EDIT! */' > $@
-	echo '#ifndef _H_COM_DIAG_$(SYMBOL)_VINTAGE_' >> $@
-	echo '#define _H_COM_DIAG_$(SYMBOL)_VINTAGE_' >> $@
-	echo '#define COM_DIAG_$(SYMBOL)_VINTAGE "$(VINTAGE)"' >> $@
-	echo '#endif' >> $@
-
-$(OUT)/$(OBC_DIR)/$(SRC_DIR)/$(PROJECT)_vintage.o:	$(OUT)/$(INC_DIR)/com/diag/$(PROJECT)/$(PROJECT)_vintage.h
+	echo '#include "com/diag/$(PROJECT)/$(PROJECT)_revision.h"' >> $@
+	echo 'const char COM_DIAG_$(SYMBOL)_REVISION_KEYWORD[] = "COM_DIAG_$(SYMBOL)_REVISION=" COM_DIAG_$(SYMBOL)_REVISION;' >> $@
+	echo 'const char * COM_DIAG_$(SYMBOL)_REVISION_VALUE = &COM_DIAG_$(SYMBOL)_REVISION_KEYWORD[sizeof("COM_DIAG_$(SYMBOL)_REVISION=") - 1];' >> $@
 
 $(OUT)/$(INC_DIR)/com/diag/$(PROJECT)/$(PROJECT)_revision.h:	Makefile
 	D=`dirname $@`; mkdir -p $$D
@@ -475,9 +487,26 @@ $(OUT)/$(INC_DIR)/com/diag/$(PROJECT)/$(PROJECT)_revision.h:	Makefile
 	echo '#define COM_DIAG_$(SYMBOL)_REVISION "$(REVISION)"' >> $@
 	echo '#endif' >> $@
 
-$(OUT)/$(OBC_DIR)/$(SRC_DIR)/$(PROJECT)_revision.o:	$(OUT)/$(INC_DIR)/com/diag/$(PROJECT)/$(PROJECT)_revision.h
+$(OUT)/$(OBC_DIR)/$(SRC_DIR)/$(PROJECT)_vintage.o:	$(OUT)/$(SRC_DIR)/$(PROJECT)_vintage.c
+	D=`dirname $@`; mkdir -p $$D
+	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ -c $<
 
-$(OUT)/$(SYM_DIR)/vintage:	$(OUT)/$(GEN_DIR)/vintage.c
+$(OUT)/$(SRC_DIR)/$(PROJECT)_vintage.c:	Makefile $(OUT)/$(INC_DIR)/com/diag/$(PROJECT)/$(PROJECT)_vintage.h
+	D=`dirname $@`; mkdir -p $$D
+	echo '/* GENERATED FILE! DO NOT EDIT! */' > $@
+	echo '#include "com/diag/$(PROJECT)/$(PROJECT)_vintage.h"' >> $@
+	echo 'const char COM_DIAG_$(SYMBOL)_VINTAGE_KEYWORD[] = "COM_DIAG_$(SYMBOL)_VINTAGE=" COM_DIAG_$(SYMBOL)_VINTAGE;' >> $@
+	echo 'const char * COM_DIAG_$(SYMBOL)_VINTAGE_VALUE = &COM_DIAG_$(SYMBOL)_VINTAGE_KEYWORD[sizeof("COM_DIAG_$(SYMBOL)_VINTAGE=") - 1];' >> $@
+
+$(OUT)/$(INC_DIR)/com/diag/$(PROJECT)/$(PROJECT)_vintage.h:	Makefile
+	D=`dirname $@`; mkdir -p $$D
+	echo '/* GENERATED FILE! DO NOT EDIT! */' > $@
+	echo '#ifndef _H_COM_DIAG_$(SYMBOL)_VINTAGE_' >> $@
+	echo '#define _H_COM_DIAG_$(SYMBOL)_VINTAGE_' >> $@
+	echo '#define COM_DIAG_$(SYMBOL)_VINTAGE "$(VINTAGE)"' >> $@
+	echo '#endif' >> $@
+
+$(OUT)/$(SYM_DIR)/vintage:	$(OUT)/$(GEN_DIR)/vintage.c $(OUT)/$(INC_DIR)/com/diag/$(PROJECT)/$(PROJECT)_release.h $(OUT)/$(INC_DIR)/com/diag/$(PROJECT)/$(PROJECT)_vintage.h $(OUT)/$(INC_DIR)/com/diag/$(PROJECT)/$(PROJECT)_revision.h
 	D=`dirname $@`; mkdir -p $$D
 	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $< $(LDFLAGS)
 
@@ -498,10 +527,12 @@ $(OUT)/$(SYM_DIR)/generate:	Makefile
 	chmod $(MODE) $@
 
 $(OUT)/$(BIN_DIR)/setup:	$(OUT)/$(BIN_DIR)/generate
+	D=`dirname $@`; mkdir -p $$D
 	$< > $@
 	chmod 644 $@
 
 $(OUT)/$(SYM_DIR)/setup:	$(OUT)/$(SYM_DIR)/generate
+	D=`dirname $@`; mkdir -p $$D
 	$< > $@
 	chmod 644 $@
 
