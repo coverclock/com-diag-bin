@@ -19,6 +19,8 @@ default:	all
 ########## Customizations
 
 TITLE				:=	XXXXXXXX
+PROJECT				:=	$(shell echo $(TITLE) | tr '[A-Z]' '[a-z]')
+SYMBOL				:=	$(shell echo $(TITLE) | tr '[a-z]' '[A-Z]')
 
 MAJOR				:=	0# API changes that may require that applications be modified.
 MINOR				:=	0# Only functionality or features added with no legacy API changes.
@@ -29,7 +31,7 @@ TARGET				:=	host# Build for the local host of the Makefile.
 COPYRIGHT			:=	2021 Digital Aggregates Corporation
 LICENSE				:=	GNU Lesser General Public License 2.1
 CONTACT				:=	coverclock@diag.com
-HOMEPAGE			:=	https://github.com/coverclock/com-diag-XXXXXXXX
+HOMEPAGE			:=	https://github.com/coverclock/com-diag-$(PROJECT)
 HOST				:=	$(shell hostname -s)
 BRANCH				:=	$(shell git rev-parse --abbrev-ref HEAD)
 REVISION			:=	$(shell git rev-parse HEAD)
@@ -68,9 +70,6 @@ SYM_DIR				:=	sym# Unstripped executable binaries
 TGZ_DIR				:=	tgz# Compressed tarballs
 
 ########## Configuration
-
-PROJECT				:=	$(shell echo $(TITLE) | tr '[A-Z]' '[a-z]')
-SYMBOL				:=	$(shell echo $(TITLE) | tr '[a-z]' '[A-Z]')
 
 HERE				:=	$(shell pwd)
 THERE				:=	$(shell realpath ../..)
@@ -187,20 +186,16 @@ clean:
 pristine:	clean
 	rm -rf $(OUT_DIR)
 
-# This is not the same as simply listing the targets as dependencies.
 scratch:
 	make pristine
 	make depend
 	make all
 
-clobber:	pristine
-	rm -f .cscope.lst .cscope.out .cscope.out.in .cscope.out.po
-
 prepare:
-	mkdir -p $(CFG_DIR); touch $(CFG_DIR)/host.mk
-	mkdir -p $(APP_DIR)/PLACEHOLDER; touch $(APP_DIR)/PLACEHOLDER/PLACEHOLDER.txt
+	test -d $(CFG_DIR) || ( mkdir -p $(CFG_DIR); touch $(CFG_DIR)/host.mk )
+	test -d $(APP_DIR) || ( mkdir -p $(APP_DIR)/PLACEHOLDER; touch $(APP_DIR)/PLACEHOLDER/PLACEHOLDER.txt )
 	for D in $(BIN_DIR) $(CFG_DIR) $(DAT_DIR) $(ETC_DIR) $(EXT_DIR) $(OLY_DIR) $(FUN_DIR) $(INC_DIR) $(SRC_DIR) $(TST_DIR) $(TXT_DIR); do \
-		mkdir -p $$D; touch $$D/PLACEHOLDER.txt; \
+		test -d $$D || ( mkdir -p $$D; touch $$D/PLACEHOLDER.txt; ) \
 	done
 
 ########## Packaging and Distribution
