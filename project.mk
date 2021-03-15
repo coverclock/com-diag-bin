@@ -1,9 +1,9 @@
 # vi: set ts=4 shiftwidth=4:
-# Copyright 2021 Digital Aggregates Corporation
-# Licensed under the terms in LICENSE.txt
+# Copyright 2021 Digital Aggregates Corporation, Arvada Colorado USA.
+# Licensed under the terms in LICENSE.txt.
 # author:Chip Overclock
 # mailto:coverclock@diag.com
-# https://github.com/coverclock/com-diag-hazer
+# https://github.com/coverclock/com-diag-XXXXXXXX
 # "Chip Overclock" is a registered trademark.
 # "Digital Aggregates Corporation" is a registered trademark.
 #
@@ -39,27 +39,33 @@ VINTAGE				:=	$(shell date -u +%Y-%m-%dT%H:%M:%S.%N%z)
 
 HOME_DIR			:=	$(HOME)/Projects
 
-########## Directories
+########## Collateral
 
 APP_DIR				:=	app# Application source directories
-ARC_DIR				:=	arc# Archive files for static linking
 BIN_DIR				:=	bin# Utility source files
 CFG_DIR				:=	cfg# Build configuration files
-DEP_DIR				:=	dep# Generated dependencies and other make files
-DOC_DIR				:=	doc# Documentation
+DAT_DIR				:=	dat# Saved datasets
 ETC_DIR				:=	etc# Miscellaneous files
 EXT_DIR				:=	ext# Extra source files not part of Hazer
+OLY_DIR				:=	oly# File system overlay
 FUN_DIR				:=	fun# Functional tests
-GEN_DIR				:=	gen# Generated source files
 INC_DIR				:=	inc# Header files
+SRC_DIR				:=	src# Library source files
+TST_DIR				:=	tst# Unit tests
+TXT_DIR				:=	txt# Miscellaneous text files
+
+########## Artifacts
+
+OUT_DIR				:=	out# Build artifacts
+ARC_DIR				:=	arc# Archive files for static linking
+DEP_DIR				:=	dep# Generated dependencies and other make files
+DOC_DIR				:=	doc# Documentation
+GEN_DIR				:=	gen# Generated source files
 LIB_DIR				:=	lib# Shared objects for dynamic linking
 MOD_DIR				:=	mod# Loadable user modules
 OBC_DIR				:=	obc# C object modules
-OUT_DIR				:=	out# Build artifacts
-SRC_DIR				:=	src# Library source files
 SYM_DIR				:=	sym# Unstripped executable binaries
 TGZ_DIR				:=	tgz# Compressed tarballs
-TST_DIR				:=	tst# Unit tests
 
 ########## Configuration
 
@@ -188,6 +194,11 @@ scratch:
 
 clobber:	pristine
 	rm -f .cscope.lst .cscope.out .cscope.out.in .cscope.out.po
+
+prepare:
+	for D in $(APP_DIR) $(BIN_DIR) $(CFG_DIR) $(DAT_DIR) $(ETC_DIR) $(EXT_DIR) $(OLY_DIR) $(FUN_DIR) $(INC_DIR) $(SRC_DIR) $(TST_DIR) $(TXT_DIR); do \
+		mkdir $$D; touch $$D/PLACEHOLDER.txt; \
+	done
 
 ########## Packaging and Distribution
 
