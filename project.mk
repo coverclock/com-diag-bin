@@ -108,7 +108,7 @@ MODE				:= 755
 
 TARGETMAKEFILE		:= $(CFG_DIR)/$(TARGET).mk
 
-include $(TARGETMAKEFILE)
+-include $(TARGETMAKEFILE)
 
 ########## Diminuto Configuration
 
@@ -173,7 +173,7 @@ TARGETALL			:=	$(TARGETLIBRARIES) $(TARGETPROGRAMS)
 
 ########## Main Entry Points
 
-.PHONY:	all dist clean pristine clobber scratch
+.PHONY:	all dist clean pristine clobber scratch prepare
 
 all:	$(TARGETALL)
 
@@ -196,6 +196,8 @@ clobber:	pristine
 	rm -f .cscope.lst .cscope.out .cscope.out.in .cscope.out.po
 
 prepare:
+	mkdir -p $(CFG_DIR); touch $(CFG_DIR)/host.mk
+	mkdir -p $(APP_DIR)/PLACEHOLDER; touch $(APP_DIR)/PLACEHOLDER/PLACEHOLDER.txt
 	for D in $(APP_DIR) $(BIN_DIR) $(DAT_DIR) $(ETC_DIR) $(EXT_DIR) $(OLY_DIR) $(FUN_DIR) $(INC_DIR) $(SRC_DIR) $(TST_DIR) $(TXT_DIR); do \
 		mkdir $$D; touch $$D/PLACEHOLDER.txt; \
 	done
