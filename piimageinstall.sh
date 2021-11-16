@@ -5,9 +5,11 @@
 ZIP=${1:-"/dev/null"}
 DEV=${2:-"/dev/null"}
 BLK=${3:-"4M"}
-CMD="unzip -p ${ZIP} | sudo dd bs=${BLK} of=${DEV} conv=fsync"
-test -f ${ZIP} || exit 2
-test -b ${DEV} || exit 2
+SRC=$(readlink -e ${ZIP})
+SNK=$(readlink -e ${DEV})
+CMD="unzip -p ${SRC} | sudo dd bs=${BLK} of=${SNK} conv=fsync"
+test -f ${SRC} || exit 2
+test -b ${SNK} || exit 2
 echo "${CMD}" 1>&2
 echo -n "[yN]? "
 read YN
