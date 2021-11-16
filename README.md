@@ -231,5 +231,6 @@ You might not need to customize the Raspberry Pi boot uSD card you restore. But 
 
 # Rotate LCD Display on Raspberry Pi
 
-    sudo echo "lcd_rotate=2" >> /boot/config.txt
+    sudo su
+    echo "lcd_rotate=2" >> /boot/config.txt
 
