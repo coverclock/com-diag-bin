@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2018-2020 Digital Aggregates Corporation, Arvada CO USA.
+# Copyright 2018-2021 Digital Aggregates Corporation, Arvada CO USA.
 # USAGE piimageinstall.sh ZIPFILE DEVICE [ BLOCKSIZE ]
 # EXAMPLE piimageinstall.sh rpi3.zip /dev/sdb
 ZIP=${1:-"/dev/null"}
@@ -18,3 +18,6 @@ case "${YN}" in
 *) exit 1;;
 esac
 eval ${CMD}
+sync
+sync
+sync

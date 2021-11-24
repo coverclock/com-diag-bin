@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2019 Digital Aggregates Corporation, Arvada CO USA.
+# Copyright 2019-2021 Digital Aggregates Corporation, Arvada CO USA.
 # USAGE piimagerestore.sh IMGFILEGZ DEVICE [ BLOCKSIZE ]
 # EXAMPLE piimagerestore.sh /mnt/framistat.gz /dev/sdc
 # N.B. If it works at all, it will only do so with the same SD card
@@ -18,3 +18,6 @@ case "${YN}" in
 *) exit 1;;
 esac
 eval ${CMD}
+sync
+sync
+sync

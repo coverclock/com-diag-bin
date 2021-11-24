@@ -18,3 +18,6 @@ case "${YN}" in
 *) exit 1;;
 esac
 eval ${CMD}
+sync
+sync
+sync
