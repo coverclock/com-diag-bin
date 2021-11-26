@@ -7,6 +7,8 @@ apt-get --yes install git
 apt-get --yes install git-lfs
 apt-get --yes install grip
 apt-get --yes install inotify-tools
+apt-get --yes install libncurses5-dev
+apt-get --yes install libncursesw5-dev
 apt-get --yes install make
 apt-get --yes install net-tools
 apt-get --yes install openssh-server
