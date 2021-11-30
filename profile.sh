@@ -69,8 +69,6 @@ if true; then
 	xhost + 1> /dev/null
 fi
 
-export EDITOR=vim
-
 if [ "$DISPLAY" == ":0" ]; then
 	:
 elif [ "$DISPLAY" == ":0.0" ]; then
@@ -95,14 +93,16 @@ fi
 #export LC_MEASUREMENT="en_US.UTF-8"
 #export LC_IDENTIFICATION="en_US.UTF-8"
 
+# This majik is needed for GNU Octave.
+export GTK_MODULES=gail:atk-bridge:unity-gtk-module 
+export GNOME_DESKTOP_SESSION_ID=this-is-depricated 
+
 PS1='${debian_chroot:+($debian_chroot)}\u@\h:\W\$ '
+
+export EDITOR=vim
 
 alias rm="rm -i"
 
 #export LD_DEBUG=files
 
 umask 022
-
-# This majik is needed for GNU Octave.
-export GTK_MODULES=gail:atk-bridge:unity-gtk-module 
-export GNOME_DESKTOP_SESSION_ID=this-is-depricated 

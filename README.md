@@ -225,7 +225,7 @@ You might not need to customize the Raspberry Pi boot uSD card you restore. But 
     Device     Boot Start        End    Sectors   Size Id Type
     /dev/sda1        2048 1953522112 1953520065 931.5G  7 HPFS/NTFS/exFAT
 
-# Install On Screen Keyboard on Raspberry Pi
+# Install On-Screen Keyboard on Raspberry Pi
 
     sudo apt install matchbox-keyboard
 
@@ -233,4 +233,13 @@ You might not need to customize the Raspberry Pi boot uSD card you restore. But 
 
     sudo su
     echo "lcd_rotate=2" >> /boot/config.txt
+
+# Typical git Configuration
+
+    git config --global user.email "you@example.com"
+    git config --global user.name "Your Name"
+
+    git config credential.helper cache
+
+    sudo apt-get install git-lfs
 
