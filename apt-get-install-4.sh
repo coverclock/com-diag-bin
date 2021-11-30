@@ -1,2 +1,3 @@
-apt-get --yes install git-lfs
-apt-get --yes install valgrind
+apt-get --yes install libncurses5-dev
+apt-get --yes install libncursesw5-dev
+apt-get --yes install cscope
