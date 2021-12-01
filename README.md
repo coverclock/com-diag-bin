@@ -234,7 +234,7 @@ You might not need to customize the Raspberry Pi boot uSD card you restore. But 
     sudo su
     echo "lcd_rotate=2" >> /boot/config.txt
 
-# Typical git Configuration
+# Typical git Configurations
 
     git config --global user.email "you@example.com"
     git config --global user.name "Your Name"
@@ -242,4 +242,8 @@ You might not need to customize the Raspberry Pi boot uSD card you restore. But 
     git config credential.helper cache
 
     sudo apt-get install git-lfs
+
+# Allow Debian Release Info Change
+
+    apt-get update --allow-releaseinfo-change
 

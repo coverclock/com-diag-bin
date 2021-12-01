@@ -1,4 +1,5 @@
 apt-get --yes install bc
+apt-get --yes install dnsutils
 apt-get --yes install g++
 apt-get --yes install gcc
 apt-get --yes install grip
