@@ -1,36 +1,38 @@
 #!/bin/bash
 # Copyright 2021 Digital Aggregates Corporation, Arvada CO USA.
-# USAGE dkimgenerate.sh DOMAIN MAILSERVICE [ KEYLENGTH ]
-# EXAMPLE dkmgenerate.sh diag.com indra 2048
+# USAGE dkimgenerate.sh DOMAIN
+# EXAMPLE dkmgenerate.sh diag.com
 # WORK IN PROGRESS!
+# File generated:
+#    <UUID>.dns   - data to be placed in DNS TXT RR.
+#    <UUID>.dns-N - DNS file split into 255 octet chunks.
+#    <UUID>.key   - private key.
+#    <UUID>.log   - standard error log.
+#    <UUID>.rec   - name of DNS TXT RR.
 
 DOM=${1}
-SER=${2}
+
+UUID=$(uuidgen -t)
 test -z "${DOM}" && exit 1
-test -z "${SER}" && exit 1
-LEN=${3:-"2048"}
 
-YMD=$(date -u +\%Y\%m\%d)
-NAM="${SER}${YMD}"
-
-LOG="${NAM}.log"
-KEY="${NAM}.key"
-DNS="${NAM}.dns"
-REC="${NAM}.rec"
+LOG="${UUID}.log"
+KEY="${UUID}.key"
+DNS="${UUID}.dns"
+REC="${UUID}.rec"
 
 cp /dev/null ${LOG}
 exec 2>> ${LOG}
 
-openssl genrsa -out ${KEY} ${LEN}
+openssl genrsa -out ${KEY} 2048
 
 PUB=$(openssl rsa -in ${KEY} -pubout -outform der | openssl base64 -A)
 
 TXT="v=DKIM1;"
 TXT+=" k=rsa;"
-TXT+=" s=${NAM};"
+TXT+=" s=${UUID};"
 TXT+=" p=${PUB}"
 echo "${TXT}" > ${DNS}
 split -a 1 -b 255 -d ${DNS} ${DNS}-
 
-echo "${NAM}._domainkey.${DOM}" > ${REC}
+echo "${UUID}._domainkey.${DOM}" > ${REC}
 cat ${REC}
