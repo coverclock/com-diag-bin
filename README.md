@@ -5,8 +5,6 @@ Raspberry Pi backup scripts and other useful Linux shell scripts.
 
 # Abstract
 
-[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/coverclock)
-
 This are just odds and ends, mostly little scripts that I have found useful
 but are not specific to a particular project.
 
@@ -234,7 +232,7 @@ You might not need to customize the Raspberry Pi boot uSD card you restore. But 
     sudo su
     echo "lcd_rotate=2" >> /boot/config.txt
 
-# Typical git Configuration
+# Typical git Configurations
 
     git config --global user.email "you@example.com"
     git config --global user.name "Your Name"
@@ -242,4 +240,8 @@ You might not need to customize the Raspberry Pi boot uSD card you restore. But 
     git config credential.helper cache
 
     sudo apt-get install git-lfs
+
+# Allow Debian Release Info Change
+
+    apt-get update --allow-releaseinfo-change
 

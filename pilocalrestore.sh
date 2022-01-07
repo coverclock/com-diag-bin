@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2019 Digital Aggregates Corporation, Arvada CO USA.
+# Copyright 2019-2021 Digital Aggregates Corporation, Arvada CO USA.
 # USAGE pilocalrestore.sh BACKUPDIR BOOTDIR ROOTDIR
 # EXAMPLE pilocalrestore.sh /mnt/pi/hostname /mntboot /mntroot
 # REFERENCES
@@ -7,8 +7,8 @@
 
 NAM=$(basename $0 .sh)
 BAK=${1:-"/mnt/pi/localhost"}
-BOT=${2:-"/mnt1boot"}
-ROT=${3:-"/mnt2root"}
+BOT=${2:-"/mntboot"}
+ROT=${3:-"/mntroot"}
 ONE="${BAK}/boot/"
 TWO="${BAK}/root/"
 
@@ -31,7 +31,7 @@ echo "[4] sudo ${EDITOR:-edit} ${ROT}/etc/hostname to change host name." 1>&2
 echo "[5] sudo ${EDITOR:-edit} ${ROT}/etc/hosts to change host name resolution." 1>&2
 echo "[6] Perform a file system check!" 1>&2
 
-# THis can take a long time, like tens of minutes. You
+# This can take a long time, like tens of minutes. You
 # can either take this flash write latency here, or when
 # you unmount the root file system (the boot file system
 # writes relatively quickly). I chose to embed it in
