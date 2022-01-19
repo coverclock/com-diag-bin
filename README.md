@@ -5,8 +5,6 @@ Raspberry Pi backup scripts and other useful Linux shell scripts.
 
 # Abstract
 
-[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/coverclock)
-
 This are just odds and ends, mostly little scripts that I have found useful
 but are not specific to a particular project.
 
