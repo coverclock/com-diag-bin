@@ -5,8 +5,6 @@ Raspberry Pi backup scripts and other useful Linux shell scripts.
 
 # Abstract
 
-[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/coverclock)
-
 This are just odds and ends, mostly little scripts that I have found useful
 but are not specific to a particular project.
 
@@ -153,3 +151,97 @@ You might not need to customize the Raspberry Pi boot uSD card you restore. But 
 <https://raspberrypi.stackexchange.com/questions/29947/reverse-the-expand-root-fs/29952#29952>
 
 <https://github.com/RPi-Distro/pi-gen/blob/master/export-noobs/00-release/files/partitions.json>
+
+# Software Updates and Installs From X11 Server
+
+    ssh -Y HOSTNAME
+    sudo update-manager
+    sudo synaptic
+
+# Add Existing User to Group dialout
+
+    sudo usermod -a -G dialout coverclock
+
+# Copy from One USB Serial Adapter to Another
+
+    socat OPEN:/dev/ttyUSB0,b115200,cs8,rawer,nonblock,clocal /dev/tty
+
+    socat OPEN:/dev/ttyUSB1,b115200,cs8,rawer,nonblock,clocal /dev/tty
+
+# Controlling Wireless Interfaces on Raspberry Pi
+
+    sudo rfkill list
+
+    0: phy0: Wireless LAN
+	    Soft blocked: yes
+	    Hard blocked: no
+    1: hci0: Bluetooth
+	    Soft blocked: yes
+	    Hard blocked: no
+
+    sudo rfkill block 0
+    sudo rfkill unblock 0
+    sudo rfkill event | cat
+
+# Configuring Raspberry Pi from a ANSI Terminal
+
+    raspi-config
+
+# Samsung T5 1TB SSD on Raspberry Pi
+
+    Nov 13 09:38:43 emerald kernel: [97036.205395] usb 2-1: new SuperSpeed Gen 1 USB device number 2 using xhci_hcd
+    Nov 13 09:38:43 emerald kernel: [97036.244948] usb 2-1: New USB device found, idVendor=04e8, idProduct=61f5, bcdDevice= 1.00
+    Nov 13 09:38:43 emerald kernel: [97036.244965] usb 2-1: New USB device strings: Mfr=2, Product=3, SerialNumber=1
+    Nov 13 09:38:43 emerald kernel: [97036.244980] usb 2-1: Product: Portable SSD T5
+    Nov 13 09:38:43 emerald kernel: [97036.244994] usb 2-1: Manufacturer: Samsung
+    Nov 13 09:38:43 emerald kernel: [97036.245007] usb 2-1: SerialNumber: 1234568941AC
+    Nov 13 09:38:43 emerald kernel: [97036.273572] scsi host0: uas
+    Nov 13 09:38:43 emerald kernel: [97036.283909] scsi 0:0:0:0: Direct-Access     Samsung  Portable SSD T5  0    PQ: 0 ANSI: 6
+    Nov 13 09:38:43 emerald kernel: [97036.287116] sd 0:0:0:0: [sda] 1953525168 512-byte logical blocks: (1.00 TB/932 GiB)
+    Nov 13 09:38:43 emerald kernel: [97036.287413] sd 0:0:0:0: [sda] Write Protect is off
+    Nov 13 09:38:43 emerald kernel: [97036.287430] sd 0:0:0:0: [sda] Mode Sense: 43 00 00 00
+    Nov 13 09:38:43 emerald kernel: [97036.288085] sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+    Nov 13 09:38:43 emerald kernel: [97036.289153] sd 0:0:0:0: [sda] Optimal transfer size 33553920 bytes
+    Nov 13 09:38:43 emerald mtp-probe: checking bus 2, device 2: "/sys/devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb2/2-1"
+    Nov 13 09:38:43 emerald mtp-probe: bus: 2, device: 2 was not an MTP device
+    Nov 13 09:38:43 emerald kernel: [97036.358205]  sda: sda1
+    Nov 13 09:38:43 emerald mtp-probe: checking bus 2, device 2: "/sys/devices/platform/scb/fd500000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/usb2/2-1"
+    Nov 13 09:38:43 emerald mtp-probe: bus: 2, device: 2 was not an MTP device
+    Nov 13 09:38:43 emerald kernel: [97036.361273] sd 0:0:0:0: [sda] Attached SCSI disk
+    Nov 13 09:38:43 emerald kernel: [97036.387775] sd 0:0:0:0: Attached scsi generic sg0 type 0
+
+    sudo fdisk -l /dev/sda
+
+    Disk /dev/sda: 931.5 GiB, 1000204886016 bytes, 1953525168 sectors
+    Disk model: Portable SSD T5
+    Units: sectors of 1 * 512 = 512 bytes
+    Sector size (logical/physical): 512 bytes / 512 bytes
+    I/O size (minimum/optimal): 512 bytes / 33553920 bytes
+    Disklabel type: dos
+    Disk identifier: 0xe2c929f4
+    
+    Device     Boot Start        End    Sectors   Size Id Type
+    /dev/sda1        2048 1953522112 1953520065 931.5G  7 HPFS/NTFS/exFAT
+
+# Install On-Screen Keyboard on Raspberry Pi
+
+    sudo apt install matchbox-keyboard
+
+# Rotate LCD Display on Raspberry Pi
+
+    sudo su
+    echo "lcd_rotate=2" >> /boot/config.txt
+
+# Typical git Configurations
+
+    git config --global user.email "you@example.com"
+    git config --global user.name "Your Name"
+
+    git config credential.helper cache
+
+    sudo apt-get install git-lfs
+
+# Allow Debian Release Info Change
+
+    apt-get update --allow-releaseinfo-change
+
