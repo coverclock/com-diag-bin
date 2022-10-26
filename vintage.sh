@@ -3,6 +3,8 @@
 # https://github.com/coverclock/com-diag-hazer
 # mailto:coverclock@diag.com
 # Convenience script to monitor instance of gpstool running headless.
-cd ${HOME}/src/com-diag-diminuto/Diminuto
-. out/host/bin/setup
-vintage
+ROOT=${HOME}/src/com-diag-diminuto/Diminuto
+cd ${ROOT}
+EXEC=out/host/bin
+. ${EXEC}/setup
+${EXEC}/vintage

@@ -5,6 +5,8 @@
 # Convenience script to monitor instance of gpstool running headless.
 FILE=${1:-"rover"}
 TYPE=${2:-"out"}
-cd ${HOME}/src/com-diag-hazer/Hazer
-. out/host/bin/setup
-peruse ${FILE} ${TYPE}
+ROOT=${HOME}/src/com-diag-hazer/Hazer
+cd ${ROOT}
+EXEC=out/host/bin
+. ${EXEC}/setup
+${EXEC}/peruse ${FILE} ${TYPE}
