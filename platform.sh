@@ -10,7 +10,7 @@
 # which the project is run. See the platforms listed in the Diminuto README
 # for additional examples.
 #
-# EXAMPLE
+# EXAMPLES
 #
 # $ platform
 # Intel(R) Core(TM) i7-7567U CPU @ 3.50GHz
@@ -23,13 +23,21 @@
 #
 
 PROCESSORS=1
+TARGET="unknown"
 if [[ -r /proc/cpuinfo ]]; then
+	PROCESSORS=$(grep '^processor[	]*: ' /proc/cpuinfo | wc -l)
+	# Probably Intel.
 	MODELNAME=$(grep '^model name[	]*: ' /proc/cpuinfo | head -1 | sed 's/^model name[	]*: //')
 	MODEL=$(grep '^Model[	]*: ' /proc/cpuinfo | head -1 | sed 's/^Model[	]*: //')
+	# Probably ARM.
 	HARDWARE=$(grep '^Hardware[	]*: ' /proc/cpuinfo | head -1 | sed 's/^Hardware[	]*: //')
 	REVISION=$(grep '^Revision[	]*: ' /proc/cpuinfo | head -1 | sed 's/^Revision[	]*: //')
-	PROCESSORS=$(grep '^processor[	]*: ' /proc/cpuinfo | wc -l)
+	# Probably RISC-V.
+	ISA=$(grep '^isa[	]*: ' /proc/cpuinfo | head -1 | sed 's/^isa[	]*: //')
+	MMU=$(grep '^mmu[	]*: ' /proc/cpuinfo | head -1 | sed 's/^mmu[	]*: //')
+	UARCH=$(grep '^uarch[	]*: ' /proc/cpuinfo | head -1 | sed 's/^uarch[	]*: //')
 fi
+TARGET=$(echo "${MODELNAME}" "${MODEL}" "${HARDWARE}" "${REVISION}" "${ISA}" "${MMU}" "${UARCH}")
 
 if [[ -r /etc/os-release ]]; then
 	. /etc/os-release
@@ -43,17 +51,6 @@ KERNELRELEASE=$(uname -r)
 GCCVERSION=$(gcc --version | head -1)
 LIBCVERSION=$(ldd --version | head -1)
 MAKEVERSION=$(make --version | head -1)
-
-TARGET="${MODEL}"
-if [[ -n "${MODELNAME}" ]]; then
-	TARGET="${TARGET} ${MODELNAME}"
-fi
-if [[ -n "${HARDWARE}" ]]; then
-	TARGET="${TARGET} ${HARDWARE}"
-fi
-if [[ -n "${REVISION}" ]]; then
-	TARGET="${TARGET} ${REVISION}"
-fi
 
 echo ${TARGET}
 echo ${PROCESSORTYPE} x${PROCESSORS}
