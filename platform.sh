@@ -6,38 +6,30 @@
 #
 # When run on the target, this script generates the platform descriptions I
 # use in the project's README. Note that in the case of cross-compilation, there
-# will be two platforms: the one on which the project is built, and the on
-# which the project is run. See the platforms listed in the Diminuto README
-# for additional examples.
+# will effectively be three platforms: the one on which the project is built,
+# the one defined by the cross-compilation toolchain on the platform on which
+# the project is built, and the on which the project is actually run. See the
+# platforms listed in the Diminuto README for additional examples.
 #
-# EXAMPLES
-#
-# $ platform
-# Intel(R) Core(TM) i7-7567U CPU @ 3.50GHz
-# x86_64 x4
-# Ubuntu 20.04.3 LTS (Focal Fossa)
-# Linux 5.13.0-28-generic
-# gcc (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
-# ldd (Ubuntu GLIBC 2.31-0ubuntu9.7) 2.31
-# GNU Make 4.2.1
+# Long long ago in a galaxy far far away, former colleagues may remember
+# with some amusement a script like this being somewhat controversially
+# named "wtf".
 #
 
 PROCESSORS=1
-TARGET="unknown"
 if [[ -r /proc/cpuinfo ]]; then
-	PROCESSORS=$(grep '^processor[	]*: ' /proc/cpuinfo | wc -l)
-	# Probably Intel.
 	MODELNAME=$(grep '^model name[	]*: ' /proc/cpuinfo | head -1 | sed 's/^model name[	]*: //')
 	MODEL=$(grep '^Model[	]*: ' /proc/cpuinfo | head -1 | sed 's/^Model[	]*: //')
-	# Probably ARM.
 	HARDWARE=$(grep '^Hardware[	]*: ' /proc/cpuinfo | head -1 | sed 's/^Hardware[	]*: //')
 	REVISION=$(grep '^Revision[	]*: ' /proc/cpuinfo | head -1 | sed 's/^Revision[	]*: //')
-	# Probably RISC-V.
-	ISA=$(grep '^isa[	]*: ' /proc/cpuinfo | head -1 | sed 's/^isa[	]*: //')
-	MMU=$(grep '^mmu[	]*: ' /proc/cpuinfo | head -1 | sed 's/^mmu[	]*: //')
-	UARCH=$(grep '^uarch[	]*: ' /proc/cpuinfo | head -1 | sed 's/^uarch[	]*: //')
+	PROCESSORS=$(grep '^processor[	]*: ' /proc/cpuinfo | wc -l)
+	if [[ -z "${MODEL}" ]]; then
+		MODEL=$(grep '^uarch[	]*: ' /proc/cpuinfo | head -1 | sed 's/^uarch[	]*: //')
+	fi
+	if [[ -z "${HARDWARE}" ]]; then
+		HARDWARE="$(grep '^isa[	]*: ' /proc/cpuinfo | head -1 | sed 's/^isa[	]*: //') $(grep '^mmu[	]*: ' /proc/cpuinfo | head -1 | sed 's/^mmu[	]*: //')"
+	fi
 fi
-TARGET=$(echo "${MODELNAME}" "${MODEL}" "${HARDWARE}" "${REVISION}" "${ISA}" "${MMU}" "${UARCH}")
 
 if [[ -r /etc/os-release ]]; then
 	. /etc/os-release
@@ -50,14 +42,36 @@ KERNELRELEASE=$(uname -r)
 
 GCCVERSION=$(gcc --version | head -1)
 LIBCVERSION=$(ldd --version | head -1)
+BINUTILSVERSION=$(ld --version 2>&1 | head -1)
 MAKEVERSION=$(make --version | head -1)
 
-echo ${TARGET}
-echo ${PROCESSORTYPE} x${PROCESSORS}
-echo ${OPERATINGSYSTEM}
-echo ${KERNELNAME} ${KERNELRELEASE}
-echo ${GCCVERSION}
-echo ${LIBCVERSION}
-echo ${MAKEVERSION}
+TARGET="${MODEL}"
+if [[ -n "${MODELNAME}" ]]; then
+	TARGET="${TARGET} ${MODELNAME}"
+fi
+if [[ -n "${HARDWARE}" ]]; then
+	TARGET="${TARGET} ${HARDWARE}"
+fi
+if [[ -n "${REVISION}" ]]; then
+	TARGET="${TARGET} ${REVISION}"
+fi
+
+ABI=$(basename $(readlink -e $(which gcc)))
+TRIPLET=$(gcc -dumpmachine)
+
+BIGLITTLE=$(endianess)
+ENDIANESS="${BIGLITTLE}-endian"
+
+echo ${TARGET} "    "
+echo ${PROCESSORTYPE} x${PROCESSORS} "    "
+echo ${OPERATINGSYSTEM} "    "
+echo ${KERNELNAME} ${KERNELRELEASE} "    "
+echo ${GCCVERSION} "    "
+echo ${LIBCVERSION} "    "
+echo ${BINUTILSVERSION} "    "
+echo ${MAKEVERSION} "    "
+echo ${ABI} "    "
+echo ${TRIPLET} "    "
+echo ${ENDIANESS} "    "
 
 exit 0
