@@ -59,8 +59,7 @@ fi
 ABI=$(basename $(readlink -e $(which gcc)))
 TRIPLET=$(gcc -dumpmachine)
 
-BIGLITTLE=$(endianess)
-ENDIANESS="${BIGLITTLE}-endian"
+ENDIANESS=$(lscpu | grep "Byte Order:" | sed 's/^Byte Order:[ 	]*//')
 
 echo ${TARGET} "    "
 echo ${PROCESSORTYPE} x${PROCESSORS} "    "
