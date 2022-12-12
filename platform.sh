@@ -59,9 +59,12 @@ fi
 ABI=$(basename $(readlink -e $(which gcc)))
 TRIPLET=$(gcc -dumpmachine)
 
+VENDORID=$(lscpu | grep "Vendor ID:" | sed 's/^Vendor ID:[ 	]*//')
+MODELNAME2=$(lscpu | grep "Model name:" | sed 's/^Model name:[ 	]*//')
 ENDIANESS=$(lscpu | grep "Byte Order:" | sed 's/^Byte Order:[ 	]*//')
 
 echo ${TARGET} "    "
+echo ${VENDORID} ${MODELNAME2} "    "
 echo ${PROCESSORTYPE} x${PROCESSORS} "    "
 echo ${OPERATINGSYSTEM} "    "
 echo ${KERNELNAME} ${KERNELRELEASE} "    "
