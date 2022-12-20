@@ -46,21 +46,20 @@ BINUTILSVERSION=$(ld --version 2>&1 | head -1)
 MAKEVERSION=$(make --version | head -1)
 
 TARGET="${MODEL}"
-if [[ -n "${MODELNAME}" ]]; then
-	TARGET="${TARGET} ${MODELNAME}"
-fi
-if [[ -n "${HARDWARE}" ]]; then
-	TARGET="${TARGET} ${HARDWARE}"
-fi
-if [[ -n "${REVISION}" ]]; then
-	TARGET="${TARGET} ${REVISION}"
-fi
+[[ -n "${MODELNAME}" ]] && TARGET="${TARGET} ${MODELNAME}"
+[[ -n "${HARDWARE}" ]] && TARGET="${TARGET} ${HARDWARE}"
+[[ -n "${REVISION}" ]] && TARGET="${TARGET} ${REVISION}"
 
 ABI=$(basename $(readlink -e $(which gcc)))
 TRIPLET=$(gcc -dumpmachine)
 
 VENDORID=$(lscpu | grep "Vendor ID:" | sed 's/^Vendor ID:[ 	]*//')
+[[ -z "${VENDORID}" ]] && VENDORID="${MODEL}"
+
 MODELNAME2=$(lscpu | grep "Model name:" | sed 's/^Model name:[ 	]*//')
+[[ -z "${MODELNAME2}" ]] && MODELNAME2="${MODELNAME}"
+[[ -z "${MODELNAME2}" ]] && MODELNAME2="${HARDWARE}"
+
 ENDIANESS=$(lscpu | grep "Byte Order:" | sed 's/^Byte Order:[ 	]*//')
 
 echo ${TARGET} "    "
