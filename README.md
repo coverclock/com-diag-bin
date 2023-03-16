@@ -248,12 +248,21 @@ You might not need to customize the Raspberry Pi boot uSD card you restore. But 
 # Kernel Building
 
     sudo apt-get install build-essential bc kmod cpio flex libncurses5-dev libelf-dev libssl-dev dwarves bison
+
     make ARCH=riscv mrproper
+
     make ARCH=riscv starfive_visionfive2_defconfig
+
     make ARCH=riscv menuconfig
+
     make ARCH=riscv -j4
+
     sudo make ARCH=riscv INSTALL_PATH=/boot/boot zinstall -j4
+
     sudo make ARCH=riscv INSTALL_MOD_PATH=/ modules_install
-    make -C ${HOME}/src/linux  M=$PWD
+
+    make -C ${HOME}/src/linux M=$PWD
+
     make -C /lib/modules/$(uname -r)/build M=${PWD}
+
     sudo make -C /lib/modules/$(uname -r)/build M=${PWD} modules_install
