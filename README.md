@@ -21,6 +21,16 @@ Wheat Ridge CO 80033 USA
 http://www.diag.com    
 mailto:coverclock@diag.com    
 
+# Script prefixes
+
+Some of the scripts have special prefixes to their names to clue you into
+what platform they are used for. (Other scripts are generally platform
+agnostic.)
+
+* or - scripts that are specific to the Orange Pi (Rockchip ARM processor).
+* pi - scripts that are specific to the Raspberry Pi (Broadcom ARM processor).
+* v5 - scripts that are specific to the VisionFive (StarFive RISC-V processor).
+
 # Examples of Managing Raspberry Pi (RPi) Boot Media
 
 At last count I have ten Raspberry Pi single board computers of various
