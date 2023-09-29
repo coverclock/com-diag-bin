@@ -1,6 +1,6 @@
 #!/bin/bash
 # Copyright 2021 Digital Aggregates Corporation, Arvada CO USA.
-# USAGE piubuntuinstall.sh XZFILE DEVICE [ BLOCKSIZE ]
+# USAGE pilibreelecinstall.sh XZFILE DEVICE [ BLOCKSIZE ]
 # EXAMPLE pilibreelecinstall.sh libreelec.gz /dev/sdb
 FIL=${1:-"/dev/null"}
 DEV=${2:-"/dev/null"}
