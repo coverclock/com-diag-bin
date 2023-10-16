@@ -3,14 +3,28 @@ com-diag-bin
 
 Linux shell scripts I have known and loved.
 
+# Copyright
+
+Copyright 2014-2023 by the Digital Aggregates Corporation, Colorado, USA.
+
+Except where noted, this software is an original work of its author.
+
+# License
+
+Licensed under the terms in LICENSE.txt. 
+
+# Trademarks
+
+"Digital Aggregates Corporation" is a registered trademark of the Digital
+Aggregates Corporation, Arvada, Colorado, USA.
+
+"Chip Overclock" is a registered trademark of John Sloan, Arvada, Colorado,
+USA.
+
 # Abstract
 
 This are just odds and ends, mostly little scripts that I have found useful
 but are not specific to a particular project.
-
-# License
-
-Licensed under the GNU Public License version 2.
 
 # Contact
 
