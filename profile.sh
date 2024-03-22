@@ -100,8 +100,11 @@ export GNOME_DESKTOP_SESSION_ID=this-is-depricated
 PS1='${debian_chroot:+($debian_chroot)}\u@\h:\W\$ '
 
 export EDITOR=vim
+export COM_DIAG_DIMINUTO_LOG_MASK=0xfe
 
 alias rm="rm -i"
+alias valgrind="valgrind --leak-check=full --show-leak-kinds=all"
+alias tailflog="journalctl -f"
 
 #export LD_DEBUG=files
 
