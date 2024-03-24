@@ -105,7 +105,7 @@ export COM_DIAG_DIMINUTO_LOG_MASK=0xfe
 alias rm="rm -i"
 alias valgrind="valgrind --leak-check=full --show-leak-kinds=all"
 alias tailflog="journalctl -f"
-alias speedmake="script --command='set -euvx && git clean -ffxd && make --jobs=16 --output-sync=recurse' /tmp/diminuto.log"
+alias speedmake="script --command='set -euvx && git clean -ffxd && make --jobs=16 --output-sync=recurse' /tmp/speedmake.log"
 
 # export LD_DEBUG=files
 
