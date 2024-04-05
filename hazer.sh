@@ -3,7 +3,7 @@
 # https://github.com/coverclock/com-diag-hazer
 # mailto:coverclock@diag.com
 # Convenience script to monitor instance of gpstool running headless.
-FILE=${1:-"rover"}
+FILE=${1:-"neof10tHinit"}
 TYPE=${2:-"out"}
 ROOT=${HOME}/src/com-diag-hazer/Hazer
 cd ${ROOT}
