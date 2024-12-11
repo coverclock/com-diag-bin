@@ -5,7 +5,7 @@ Linux shell scripts I have known and loved.
 
 # Copyright
 
-Copyright 2014-2023 by the Digital Aggregates Corporation, Colorado, USA.
+Copyright 2014-2024 by the Digital Aggregates Corporation, Colorado, USA.
 
 Except where noted, this software is an original work of its author.
 
@@ -24,7 +24,8 @@ USA.
 # Abstract
 
 This are just odds and ends, mostly little scripts that I have found useful
-but are not specific to a particular project.
+but are not specific to a particular project. Only a very few of them are
+documented here.
 
 # Contact
 
@@ -38,8 +39,8 @@ mailto:coverclock@diag.com
 # Script prefixes
 
 Some of the scripts have special prefixes to their names to clue you into
-what platform they are used for. (Other scripts are generally platform
-agnostic.)
+what platform they are used for. Other scripts are generally platform
+agnostic.
 
 * or - scripts that are specific to the Orange Pi (Rockchip ARM processor).
 * pi - scripts that are specific to the Raspberry Pi (Broadcom ARM processor).
@@ -115,10 +116,20 @@ The partitioning on the standard Raspbian image differs from jessie to stretch t
 
 ## Install a zipped RPi image on an identical or larger uSD card offline.
 
-This uses zip instead of gzip because that's the format that Raspbian disk images are distributed in by the Raspberry Pi organization.
+This uses zip instead of gzip because that's the format that Raspbian
+disk images are distributed in by the Raspberry Pi organization.
 
     piimageinstall ./doodad.zip /dev/sdx
     piimageexpand /dev/sdx buster
+
+## Install an xzipped RPi image on an identical or larger uSD card offline.
+
+The later versions of Raspberry Pi OS (the artist formerly known as
+Raspbian, a name I insist on still using) use xv as a compression format.
+The install process that is invoked when this media is booted on the Pi
+will expand the root file system to fill the entire uSD card.
+
+    piimageinstallxz 2024-11-19-raspios-bookworm-arm64-full.img.xz /dev/sdb
 
 ## Extract the complete RPi image from a uSD card to a zip file offline.
 
