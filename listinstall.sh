@@ -30,9 +30,6 @@ nodejs \
 openssh-server \
 openssl \
 pps-tools \
-python-dev \
-python-pip \
-python-smbus \
 scons \
 screen \
 sharutils \
