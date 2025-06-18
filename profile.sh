@@ -51,31 +51,37 @@ echo $PATH | grep -q "$NEWPATH" || export PATH=$NEWPATH:$PATH
 # export DTC=$HOME/Projects/stampede/dtc
 
 #  ssh -X 192.168.1.222
-if true; then
+#if true; then
 # jsloan   pts/2        2013-01-25 09:27 (john-sloans-mac-mini.local)
-	export XSERVER="`who am i | sed 's/^.*(//;s/).*$//'`"
-	if [ "$DISPLAY" != "" ]; then
-		:
-	elif [ "$XSERVER" = ":0.0" ]; then
-		DISPLAY=":0.0"
-	elif [ "$XSERVER" = ":0" ]; then
-		DISPLAY=":0"
-	elif [ "$XSERVER" = "" ]; then
-		DISPLAY=":0"
-	else
-		DISPLAY="$XSERVER:0.0"
-	fi
-	export DISPLAY
-	xhost + 1> /dev/null
-fi
+#	export XSERVER="`who am i | sed 's/^.*(//;s/).*$//'`"
+#	if [ "$DISPLAY" != "" ]; then
+#		:
+#	elif [ "$XSERVER" = ":0.0" ]; then
+#		DISPLAY=":0.0"
+#	elif [ "$XSERVER" = ":0" ]; then
+#		DISPLAY=":0"
+#	elif [ "$XSERVER" = "" ]; then
+#		DISPLAY=":0"
+#	else
+#		DISPLAY="$XSERVER:0.0"
+#	fi
+#	export DISPLAY
+#	xhost + 1> /dev/null
+#fi
 
-if [ "$DISPLAY" == ":0" ]; then
-	:
-elif [ "$DISPLAY" == ":0.0" ]; then
-	:
-else
-	pgrep -U jsloan Xvnc4 || vncserver
-fi
+#if [ "$DISPLAY" == ":0" ]; then
+#	:
+#elif [ "$DISPLAY" == ":0.0" ]; then
+#	:
+#else
+#	pgrep -U jsloan Xvnc4 || vncserver
+#fi
+
+#  This majik is needed for GNU Octave.
+# export GTK_MODULES=gail:atk-bridge:unity-gtk-module 
+# export GNOME_DESKTOP_SESSION_ID=this-is-depricated 
+
+# export LD_DEBUG=files
 
 # export LANG=C
 # export LANG="EN_US"
@@ -93,9 +99,7 @@ fi
 # export LC_MEASUREMENT="en_US.UTF-8"
 # export LC_IDENTIFICATION="en_US.UTF-8"
 
-#  This majik is needed for GNU Octave.
-# export GTK_MODULES=gail:atk-bridge:unity-gtk-module 
-# export GNOME_DESKTOP_SESSION_ID=this-is-depricated 
+export LC_ALL="en_US.UTF-8"
 
 PS1='${debian_chroot:+($debian_chroot)}\u@\h:\W\$ '
 
@@ -108,7 +112,5 @@ alias journalcat="journalctl"
 alias journalfollow="journalctl -f"
 alias speedmake="script --command='set -euvx && git clean -ffxd && make --jobs=16 --output-sync=recurse' /tmp/speedmake.log"
 alias speedcheck="egrep -i '(error|warning)' /tmp/speedmake.log"
-
-# export LD_DEBUG=files
 
 umask 022
